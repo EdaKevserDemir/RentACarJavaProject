@@ -45,7 +45,7 @@ public class CarManager implements CarService {
 			
 			car.setState(1);
 		//	car.setMaintenances(car.getMaintenances());
-			car.setState(car.getState());
+		//	car.setState(car.getState());
 			
 			Brand brand = new Brand();
 			brand.setId(createCarRequest.getBrandId());
