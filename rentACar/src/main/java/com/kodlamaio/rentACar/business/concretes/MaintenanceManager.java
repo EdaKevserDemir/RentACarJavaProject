@@ -56,12 +56,13 @@ public class MaintenanceManager implements MaintenanceService {
 		maintenanceToUpdate.setCar(car);
 		LocalDate date = LocalDate.parse("2022-06-09");
 
-		if (date.equals(maintenanceToUpdate.getDateReturned())) {
+		if (date.equals(maintenanceToUpdate.getDateReturned()) || date.isAfter(maintenanceToUpdate.getDateReturned())
+				|| date.isBefore(maintenanceToUpdate.getDateReturned())) {
 
-			car.setState(2);
+			car.setState(1);
 		}
 
-		car.setState(1);
+		car.setState(2);
 
 		maintenanceRepository.save(maintenanceToUpdate);
 		return new SuccessResult("Bakım durumu güncellendi");
@@ -69,9 +70,9 @@ public class MaintenanceManager implements MaintenanceService {
 
 	@Override
 	public Result delete(DeleteMaintenanceRequest deleteMaintenanceRequest) {
-		 this.maintenanceRepository.deleteById(deleteMaintenanceRequest.getId());
-		 return new SuccessResult("silindi");
-		
+		this.maintenanceRepository.deleteById(deleteMaintenanceRequest.getId());
+		return new SuccessResult("silindi");
+
 	}
 
 	@Override

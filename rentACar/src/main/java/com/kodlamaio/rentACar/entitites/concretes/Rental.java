@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "cars" })
 
-@Table(name = "rental")
+@Table(name = "rentals")
 public class Rental {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
