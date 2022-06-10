@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateCarRequest {
-	private int id;
-	private String name;
+public class DeleteColorRequest {
+private int id;
 }

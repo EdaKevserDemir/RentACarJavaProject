@@ -16,8 +16,10 @@ public class UpdateCarRequest {
 	private String description;
 	private double dailyPrice;
 	private int brandId;
-	private Brand brand;
-	private Color color;
 	private int colorId;
+	private double kilometer;
+	private String carPlate;
+	private int maintenanceId;
+	private int state;
 
 }

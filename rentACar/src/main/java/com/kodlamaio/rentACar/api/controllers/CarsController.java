@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kodlamaio.rentACar.business.abstracts.CarService;
 import com.kodlamaio.rentACar.business.requests.cars.CreateCarRequest;
+import com.kodlamaio.rentACar.business.requests.cars.DeleteCarRequest;
+import com.kodlamaio.rentACar.business.requests.cars.UpdateCarRequest;
+import com.kodlamaio.rentACar.business.response.cars.CarResponse;
+import com.kodlamaio.rentACar.business.response.cars.ListCarResponse;
+import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
 import com.kodlamaio.rentACar.entitites.concretes.Car;
 
@@ -37,21 +42,21 @@ public class CarsController {
 	}
 	
 	@PostMapping("/update")
-	private void update(@RequestBody CreateCarRequest createCarRequest) {
-		this.carService.update(createCarRequest);
+	private Result update(@RequestBody UpdateCarRequest updateCarRequest) {
+	return	this.carService.update(updateCarRequest);
 	}
 	@PostMapping("/delete")
-	private void delete(@RequestBody CreateCarRequest createCarRequest) {
-		this.carService.delete(createCarRequest);
+	private Result delete(@RequestBody DeleteCarRequest deleteCarRequest) {
+		return this.carService.delete(deleteCarRequest);
 	}
 
 	@GetMapping("/getall")
-	private List<Car> getAll(@RequestBody CreateCarRequest createCarRequest) {
+	private DataResult<List<ListCarResponse>> getAll() {
 		return carService.getAll();
 	
 	}
 	@GetMapping("/getbyid")
-	private Car getById(@RequestBody CreateCarRequest createCarRequest) {
-		return carService.getById(createCarRequest.getId());
+	private DataResult<CarResponse> getById(@RequestBody int id) {
+		return carService.getById(id);
 	}
 }

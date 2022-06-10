@@ -3,18 +3,23 @@ package com.kodlamaio.rentACar.business.abstracts;
 import java.util.List;
 
 import com.kodlamaio.rentACar.business.requests.colors.CreateColorRequest;
-import com.kodlamaio.rentACar.entitites.concretes.Color;
+import com.kodlamaio.rentACar.business.requests.colors.DeleteColorRequest;
+import com.kodlamaio.rentACar.business.requests.colors.UpdateColorRequest;
+import com.kodlamaio.rentACar.business.response.colors.ColorResponse;
+import com.kodlamaio.rentACar.business.response.colors.ListColorResponse;
+import com.kodlamaio.rentACar.core.utilities.results.DataResult;
+import com.kodlamaio.rentACar.core.utilities.results.Result;
 
 public interface ColorService {
 
-	void add(CreateColorRequest createColorRequest);
+	Result add(CreateColorRequest createColorRequest);
 
-	void delete(CreateColorRequest createeateColorRequest);
+	Result delete(DeleteColorRequest deleteColorRequest);
 
-	void update(CreateColorRequest createColorRequest);
+	Result update(UpdateColorRequest updateColorRequest);
 
-	List<Color> getAll();
+	DataResult<List<ListColorResponse>> getAll();
 
-	Color getById(int id);
+	DataResult<ColorResponse> getById(int id);
 
 }

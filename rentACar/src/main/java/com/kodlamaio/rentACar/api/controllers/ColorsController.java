@@ -11,7 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kodlamaio.rentACar.business.abstracts.ColorService;
 import com.kodlamaio.rentACar.business.requests.colors.CreateColorRequest;
+import com.kodlamaio.rentACar.business.requests.colors.DeleteColorRequest;
+import com.kodlamaio.rentACar.business.requests.colors.UpdateColorRequest;
 import com.kodlamaio.rentACar.business.response.colors.ColorResponse;
+import com.kodlamaio.rentACar.business.response.colors.ListColorResponse;
+import com.kodlamaio.rentACar.core.utilities.results.DataResult;
+import com.kodlamaio.rentACar.core.utilities.results.Result;
+import com.kodlamaio.rentACar.core.utilities.results.SuccessResult;
 import com.kodlamaio.rentACar.entitites.concretes.Color;
 
 @RestController
@@ -37,24 +43,26 @@ public class ColorsController {
 	}
 
 	@PostMapping("/delete")
-	private void delete(@RequestBody CreateColorRequest createColorRequest) {
-		this.colorService.delete(createColorRequest);
+	private Result delete(@RequestBody DeleteColorRequest deleteColorRequest) {
+	return	this.colorService.delete(deleteColorRequest);
 
+		
 	}
 
 	@PostMapping("/update")
-	private void update(@RequestBody CreateColorRequest createColorRequest) {
-		this.colorService.update(createColorRequest);
+	private Result update(@RequestBody UpdateColorRequest updateColorRequest) {
+		return this.colorService.update(updateColorRequest);
+		
 	}
 
 	@GetMapping("/getall")
-	private List<Color> getAll() {
+	private DataResult<List<ListColorResponse>> getAll() {
 		return colorService.getAll();
 	}
 
 	@GetMapping("/getbyid")
 
-	private Color getById(@RequestBody ColorResponse colorResponse) {
-		return colorService.getById(colorResponse.getId());
+	private DataResult<ColorResponse> getById(@RequestBody int id) {
+		return colorService.getById(id);
 	}
 }

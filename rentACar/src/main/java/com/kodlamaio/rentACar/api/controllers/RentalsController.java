@@ -12,6 +12,7 @@ import com.kodlamaio.rentACar.business.abstracts.RentalService;
 import com.kodlamaio.rentACar.business.requests.rentals.CreateRentalRequest;
 import com.kodlamaio.rentACar.business.requests.rentals.DeleteRentalRequest;
 import com.kodlamaio.rentACar.business.requests.rentals.UpdateRentalRequest;
+import com.kodlamaio.rentACar.business.response.rentals.ListRentalResponse;
 import com.kodlamaio.rentACar.business.response.rentals.RentalResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
@@ -44,14 +45,14 @@ public class RentalsController {
 	}
 
 	@GetMapping("/getall")
-	public DataResult<List<Rental>> getAll() {
+	public DataResult<List<ListRentalResponse>> getAll() {
 		return this.rentalService.getAll();
 
 	}
 	
 	@GetMapping("/getbyid")
-	public DataResult<Rental>getId(@RequestBody RentalResponse  rentalResponse){
-		return this.rentalService.getById(rentalResponse);
+	public DataResult<RentalResponse>getId(@RequestBody int  id){
+		return this.rentalService.getById(id);
 	}
 			
 }
