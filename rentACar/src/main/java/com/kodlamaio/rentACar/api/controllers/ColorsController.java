@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kodlamaio.rentACar.business.abstracts.ColorService;
@@ -32,10 +33,7 @@ public class ColorsController {
 		this.colorService = colorService;
 	}
 
-	@GetMapping("/getColor")
-	public String getColor() {
-		return "color";
-	}
+	
 
 	@PostMapping("/add")
 	private void add(@RequestBody CreateColorRequest createColorRequest) {
@@ -62,7 +60,7 @@ public class ColorsController {
 
 	@GetMapping("/getbyid")
 
-	private DataResult<ColorResponse> getById(@RequestBody int id) {
+	private DataResult<ColorResponse> getById(@RequestParam int id) {
 		return colorService.getById(id);
 	}
 }

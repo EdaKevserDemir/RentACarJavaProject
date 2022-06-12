@@ -34,14 +34,15 @@ public class RentalManager implements RentalService {
 	RentalRepository rentalRepository;
 
 	CarRepository carRepository;
-	
+
 	ModelMapperService modelMapperService;
 
-	public RentalManager(RentalRepository rentalRepository, CarRepository carRepository,ModelMapperService modelMapperService) {
+	public RentalManager(RentalRepository rentalRepository, CarRepository carRepository,
+			ModelMapperService modelMapperService) {
 
 		this.rentalRepository = rentalRepository;
 		this.carRepository = carRepository;
-		this.modelMapperService=modelMapperService;
+		this.modelMapperService = modelMapperService;
 
 	}
 
@@ -57,8 +58,8 @@ public class RentalManager implements RentalService {
 		LocalDate start = createRentalRequest.getPickupDate();
 		LocalDate end = createRentalRequest.getReturnDate();
 
-		Rental rental=this.rentalRepository.findById(createRentalRequest.getId());
-		Car car=this.carRepository.findById(createRentalRequest.getCarId());
+		Rental rental = this.rentalRepository.findById(createRentalRequest.getId());
+		Car car = this.carRepository.findById(createRentalRequest.getCarId());
 		car.setState(3);
 
 		rental.setTotalDays(calculateTotalDays(start, end));
@@ -67,7 +68,8 @@ public class RentalManager implements RentalService {
 
 		double totalPrice = car.getDailyPrice() * days;
 
-		// rental.setTotalPrice(calculateTotalPrice(carRepository.findById), days));
+		// rental.setTotalPrice(calculateTotalPrice(carRepository.findById(createCarRequest.getId()),
+		// days));
 		rental.setTotalPrice(totalPrice);
 		rental.setCar(car);
 
@@ -121,7 +123,9 @@ public class RentalManager implements RentalService {
 	@Override
 	public DataResult<RentalResponse> getById(int id) {
 
-		return new SuccessDataResult<RentalResponse>(this.modelMapperService.forResponse().map(id, RentalResponse.class));	}
+		return new SuccessDataResult<RentalResponse>(
+				this.modelMapperService.forResponse().map(id, RentalResponse.class));
+	}
 
 	public Integer calculateTotalDays(LocalDate pickupDate, LocalDate returnDate) {
 		int totalDay = 0;

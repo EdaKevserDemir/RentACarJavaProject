@@ -9,5 +9,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CarResponse {
 	private int id;
+	private String description;
+	
+	private double dailyPrice;
+	private int brandId;
+	private int colorId;
+	private double kilometer;
+	private String carPlate;
+	private int maintenanceId;
+	private int state;
 
 }

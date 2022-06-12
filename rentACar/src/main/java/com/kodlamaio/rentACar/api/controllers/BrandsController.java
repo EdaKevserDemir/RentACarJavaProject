@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kodlamaio.rentACar.business.abstracts.BrandService;
@@ -30,10 +31,6 @@ public class BrandsController {
 		this.brandService = brandService;
 	}
 
-	@GetMapping("/sayHello") // endpoint
-	public String sayHello() {
-		return "Hello Spring";
-	}
 
 	@PostMapping("/add")
 	public Result add(@RequestBody CreateBrandRequest createBrandRequest) {
@@ -47,7 +44,7 @@ public class BrandsController {
 		return this.brandService.delete(deleteBrandRequest);
 	}
 
-	@PutMapping("/update")
+	@PostMapping("/update")
 	public Result update(@RequestBody UpdateBrandRequest updateBrandRequest) {
 		return this.brandService.update(updateBrandRequest);
 	}
@@ -60,7 +57,7 @@ public class BrandsController {
 	}
 	
 	@GetMapping("/getbyid")
-	public DataResult<BrandResponse> getById(@RequestBody int id) {
+	public DataResult<BrandResponse> getById(@RequestParam int id) {
 		return brandService.getById(id);
 		
 		

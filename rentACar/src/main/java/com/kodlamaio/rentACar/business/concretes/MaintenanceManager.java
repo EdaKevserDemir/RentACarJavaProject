@@ -49,12 +49,12 @@ public class MaintenanceManager implements MaintenanceService {
 //		maintenance.setId(createMaintenanceRequest.getId());
 //		maintenance.setDateSent(createMaintenanceRequest.getDateSent());
 //		maintenance.setDateReturned(createMaintenanceRequest.getDateReturned());
-		car.setState(2);
+		
 //
 	
 		Maintenance maintenance = this.modelMapperService.forRequest().map(createMaintenanceRequest, Maintenance.class);
 		maintenance.setCar(car);
-		
+		car.setState(2);
 		this.maintenanceRepository.save(maintenance);
 		return new SuccessResult("BRAND.ADDED");
 

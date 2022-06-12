@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kodlamaio.rentACar.business.abstracts.BrandService;
 import com.kodlamaio.rentACar.business.requests.brands.CreateBrandRequest;
@@ -12,6 +13,9 @@ import com.kodlamaio.rentACar.business.requests.brands.DeleteBrandRequest;
 import com.kodlamaio.rentACar.business.requests.brands.UpdateBrandRequest;
 import com.kodlamaio.rentACar.business.response.brands.BrandResponse;
 import com.kodlamaio.rentACar.business.response.brands.ListBrandResponse;
+import com.kodlamaio.rentACar.business.response.cars.CarResponse;
+import com.kodlamaio.rentACar.business.response.colors.ColorResponse;
+import com.kodlamaio.rentACar.core.utilities.exceptions.BusinessException;
 import com.kodlamaio.rentACar.core.utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
@@ -19,6 +23,7 @@ import com.kodlamaio.rentACar.core.utilities.results.SuccessDataResult;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessResult;
 import com.kodlamaio.rentACar.dataAccess.abstracts.BrandRepository;
 import com.kodlamaio.rentACar.entitites.concretes.Brand;
+import com.kodlamaio.rentACar.entitites.concretes.Car;
 
 @Service
 public class BrandManager implements BrandService {
@@ -40,6 +45,8 @@ public class BrandManager implements BrandService {
 		// brand.setName(createBrandRequest.getName()); // gelen requesti veri tabanı
 		// nesnesine çevirdi.Mapping yapıldı.
 
+		checkIfBrandExistsByName(createBrandRequest.getName());
+
 		Brand brand = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
 		this.brandRepository.save(brand);
 		return new SuccessResult("BRAND.ADDED");
@@ -48,7 +55,7 @@ public class BrandManager implements BrandService {
 	@Override
 	public Result delete(DeleteBrandRequest deleteBrandRequest) {
 
-		brandRepository.delete(brandRepository.getById(deleteBrandRequest.getId()));
+		brandRepository.deleteById(deleteBrandRequest.getId());
 		return new SuccessResult("deleted");
 
 	}
@@ -79,8 +86,16 @@ public class BrandManager implements BrandService {
 
 	@Override
 	public DataResult<BrandResponse> getById(int id) {
-
-		return new SuccessDataResult<BrandResponse>(this.modelMapperService.forResponse().map(id, BrandResponse.class));
+		Brand brand = this.brandRepository.findById(id);
+		BrandResponse response = this.modelMapperService.forResponse().map(brand,BrandResponse.class);
+		return new SuccessDataResult<BrandResponse>(response);
+		//return new SuccessDataResult<BrandResponse>(this.modelMapperService.forResponse().map(id, BrandResponse.class));
 	}
 
+	public void checkIfBrandExistsByName(String name) {
+		Brand currentBrand = this.brandRepository.findByName(name);
+		if (currentBrand != null) {
+			throw new BusinessException("BRAND.EXISTS");
+		}
+	}
 }

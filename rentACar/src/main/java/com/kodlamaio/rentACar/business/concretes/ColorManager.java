@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kodlamaio.rentACar.business.abstracts.ColorService;
 import com.kodlamaio.rentACar.business.requests.colors.CreateColorRequest;
@@ -28,19 +29,20 @@ public class ColorManager implements ColorService {
 	private ColorRepository colorRepository;
 	private ModelMapperService modelMapperService;
 
-	public ColorManager(ColorRepository colorRepository) {
+	public ColorManager(ColorRepository colorRepository,ModelMapperService modelMapperService) {
 
 		this.colorRepository = colorRepository;
+		this.modelMapperService=modelMapperService;
 	}
 
 	@Override
 	public Result add(CreateColorRequest createColorRequest) {
-//	Color color=new Color();
-//	color.setName(createColorRequest.getName());
+
+			
 		Color color = this.modelMapperService.forRequest().map(createColorRequest, Color.class);
 
 		this.colorRepository.save(color);
-		return new SuccessResult("Eklendi");
+		return new SuccessResult("COLOR.ADDED");
 
 	}
 
@@ -55,11 +57,13 @@ public class ColorManager implements ColorService {
 	public Result update(UpdateColorRequest updateColorRequest) {
 //		Color color=getById(createColorRequest.getId());
 //		color.setName(createColorRequest.getName());
+		
+		
 
 		Color color = this.modelMapperService.forRequest().map(updateColorRequest, Color.class);
 
-		 this.colorRepository.save(color);
-		 return new SuccessResult("Güncellendi");
+		this.colorRepository.save(color);
+		return new SuccessResult("COLOR.UPDATED");
 
 	}
 
@@ -76,10 +80,12 @@ public class ColorManager implements ColorService {
 	}
 
 	@Override
-	public DataResult<ColorResponse> getById(int id) {
+	public DataResult<ColorResponse> getById( int id) {
 
+		Color color=this.colorRepository.findById(id);
+		ColorResponse response=this.modelMapperService.forResponse().map(color, ColorResponse.class);
 		
-		return new SuccessDataResult<ColorResponse>(this.modelMapperService.forResponse().map(id, ColorResponse.class));
+		return new SuccessDataResult<ColorResponse>(response);
 	}
 
 }

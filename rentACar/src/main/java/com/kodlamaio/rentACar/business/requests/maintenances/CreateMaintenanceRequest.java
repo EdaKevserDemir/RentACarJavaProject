@@ -15,6 +15,6 @@ public class CreateMaintenanceRequest {
 	private LocalDate dateSent;
 	private LocalDate dateReturned;
 	private int carId;
-	private int state;
+	
 
 }

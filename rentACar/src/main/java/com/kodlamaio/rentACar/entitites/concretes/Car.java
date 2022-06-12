@@ -34,8 +34,9 @@ public class Car {
 	private int id;
 	@Column(name = "description")
 	private String description;
+	
 	@Column(name = "dailyPrice")
-	private Double dailyPrice;
+	private double dailyPrice;
 
 	@ManyToOne
 	@JoinColumn(name = "brand_id")
