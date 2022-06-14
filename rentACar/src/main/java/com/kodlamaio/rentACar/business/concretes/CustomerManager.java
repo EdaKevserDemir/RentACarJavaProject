@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.kodlamaio.rentACar.business.abstracts.CustomerCheckService;
 import com.kodlamaio.rentACar.business.abstracts.CustomerService;
 import com.kodlamaio.rentACar.business.requests.customers.CreateCustomerRequest;
 import com.kodlamaio.rentACar.business.requests.customers.DeleteCustomerRequest;
@@ -30,11 +31,13 @@ public class CustomerManager implements CustomerService {
 
 	CustomerRepository customerRepository;
 	ModelMapperService modelMapperService;
+	CustomerCheckService customerCheckService;
 
-	public CustomerManager(CustomerRepository customerRepository, ModelMapperService modelMapperService) {
+	public CustomerManager(CustomerRepository customerRepository, ModelMapperService modelMapperService,CustomerCheckService customerCheckService) {
 
 		this.customerRepository = customerRepository;
 		this.modelMapperService = modelMapperService;
+		this.customerCheckService=customerCheckService;
 	}
 
 	@Override
@@ -85,5 +88,7 @@ public class CustomerManager implements CustomerService {
 				.collect(Collectors.toList());
 		return new SuccessDataResult<List<ListCustomerResponse>>(response);
 		}
+	
+	
  
 }

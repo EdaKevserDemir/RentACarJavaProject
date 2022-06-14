@@ -35,5 +35,7 @@ public class Customer {
 	private String eMail;
 	@Column(name="password")
 	private String password;
+	@Column(name="birthYear")
+	private int birthYear;
 
 }

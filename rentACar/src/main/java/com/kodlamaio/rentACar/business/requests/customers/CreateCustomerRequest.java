@@ -20,5 +20,6 @@ public class CreateCustomerRequest {
 	private String identity;
 	private String eMail;
 	private String password;
+	private int birthYear;
 
 }
