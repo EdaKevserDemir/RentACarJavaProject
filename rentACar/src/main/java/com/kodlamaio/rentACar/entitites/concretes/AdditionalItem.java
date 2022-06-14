@@ -2,41 +2,36 @@ package com.kodlamaio.rentACar.entitites.concretes;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "cars" })
-@Table(name = "brands")
-
-public class Brand {
-	@Id()
-
+@Table(name="additionalitems")
+public class AdditionalItem {
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-
-	@Column(name = "id")
+	@Column(name="id")
 	private int id;
-
-	@Column(name = "name")
+	@Column(name="description")
+	private String description;
+	@Column(name="name")
 	private String name;
+	@Column(name="dailyPrice")
+	private double dailyPrice;	
+	
+	@OneToMany(mappedBy ="additionalItem")
+	List<Additional>additional;
 
-	@OneToMany(mappedBy = "brand")
-	List<Car> cars;
 }

@@ -3,7 +3,9 @@ package com.kodlamaio.rentACar.business.concretes;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import com.kodlamaio.rentACar.business.response.rentals.ListRentalResponse;
 import com.kodlamaio.rentACar.business.response.rentals.RentalResponse;
 import com.kodlamaio.rentACar.core.utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
+import com.kodlamaio.rentACar.core.utilities.results.ErrorResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessDataResult;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessResult;
@@ -48,55 +51,45 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
-//		Rental rental = new Rental();
-//		Car car = this.carRepository.findById(createRentalRequest.getCarId());
-//		car.setId(createRentalRequest.getCarId());
-//		rental.setPickupDate(createRentalRequest.getPickupDate());
-//		rental.setReturnDate(createRentalRequest.getReturnDate());
-//		// rental.setTotalDays(createRentalRequest.getTotalDays());
-//		rental.setTotalPrice(createRentalRequest.getTotalPrice());
-		LocalDate start = createRentalRequest.getPickupDate();
-		LocalDate end = createRentalRequest.getReturnDate();
+	if (checkIfCarState(createRentalRequest.getCarId())) {
 
-		Rental rental = this.rentalRepository.findById(createRentalRequest.getId());
-		Car car = this.carRepository.findById(createRentalRequest.getCarId());
-		car.setState(3);
+		Rental rental = this.modelMapperService.forRequest().map(createRentalRequest, Rental.class);
+	
+		if (this.checkIfDatesAreCorrect(rental.getPickupDate(), rental.getReturnDate())) {
+			long dayDifference = (rental.getReturnDate().getTime()
+					- rental.getPickupDate().getTime());
+			long time = TimeUnit.DAYS.convert(dayDifference, TimeUnit.MILLISECONDS);
+			Car car = this.carRepository.findById(createRentalRequest.getCarId());
+			car.setState(3);
+			rental.setTotalDays((int)time);
+			double totalPrice = car.getDailyPrice() * time;
+			rental.setTotalPrice(totalPrice);
 
-		rental.setTotalDays(calculateTotalDays(start, end));
+			this.rentalRepository.save(rental);
+			return new SuccessResult("CAR.RENTED");
+		}
 
-		int days = rental.getTotalDays();
-
-		double totalPrice = car.getDailyPrice() * days;
-
-		// rental.setTotalPrice(calculateTotalPrice(carRepository.findById(createCarRequest.getId()),
-		// days));
-		rental.setTotalPrice(totalPrice);
-		rental.setCar(car);
-
-		this.rentalRepository.save(rental);
-		return new SuccessResult("Rental eklendi");
 	}
+	return new ErrorResult("CAR.NOT.RENT");
 
+}
 	@Override
 	public Result update(UpdateRentalRequest updateRentalRequest) {
 		Rental rentalToupdate = rentalRepository.findById(updateRentalRequest.getId());
-//		rentalToupdate.setPickupDate(updateRentalRequest.getPickupDate());
-//		rentalToupdate.setReturnDate(updateRentalRequest.getReturnDate());
-//		rentalToupdate.setTotalDays(updateRentalRequest.getTotalDays());
-//		rentalToupdate.setTotalPrice(updateRentalRequest.getTotalPrice());
+
 		Car car = carRepository.findById(updateRentalRequest.getCarId());
 		car.setId(updateRentalRequest.getCarId());
 //		rentalToupdate.setCar(car);
 //
 		LocalDate date = LocalDate.now();
-
-		if (date.equals(rentalToupdate.getReturnDate()) || date.isBefore(rentalToupdate.getPickupDate())
-				|| date.isAfter(rentalToupdate.getReturnDate())) {
-			car.setState(1);
-
-		} else {
-			car.setState(3);
-		}
+//
+//		if (date.equals(rentalToupdate.getReturnDate()) || date.isBefore(rentalToupdate.getPickupDate())
+//				|| date.isAfter(rentalToupdate.getReturnDate())) {
+//			car.setState(1);
+//
+//		} else {
+//			car.setState(3);
+//		}
 
 		this.rentalRepository.save(rentalToupdate);
 		return new SuccessResult("update edildi");
@@ -127,10 +120,20 @@ public class RentalManager implements RentalService {
 				this.modelMapperService.forResponse().map(id, RentalResponse.class));
 	}
 
-	public Integer calculateTotalDays(LocalDate pickupDate, LocalDate returnDate) {
-		int totalDay = 0;
+	private boolean checkIfDatesAreCorrect(Date pickupDate, Date returnDate) {
+		if (!pickupDate.before(returnDate) )  {
+			return false;
+		} 
+		return true;
+		
+	}
 
-		return totalDay = Period.between(pickupDate, returnDate).getDays();
+	private boolean checkIfCarState(int id) {
+		Car car = this.carRepository.findById(id);
+		if (car.getState() == 1) {
+			return true;
+		}
+		return false;
 
 	}
 

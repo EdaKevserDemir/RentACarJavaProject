@@ -1,6 +1,7 @@
 package com.kodlamaio.rentACar.entitites.concretes;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,10 +38,10 @@ public class Rental {
 	private Car car;
 	
 	@Column(name="pickupDate")
-	private LocalDate pickupDate;
+	private Date pickupDate;
 	
 	@Column(name="returnDate")
-	private LocalDate returnDate;
+	private Date returnDate;
 	
 	@Column(name="totalDays")
 	private int totalDays;
@@ -48,5 +49,16 @@ public class Rental {
 	@Column(name="totalPrice")
 	private double totalPrice;
 	
+	@ManyToOne
+	@JoinColumn(name="pickUpCity_id")
+	private City pickCity;
+	
+	@ManyToOne
+	@JoinColumn(name="returnCity_id")
+	private City returnCity;
+	
+	@ManyToOne
+	@JoinColumn(name = "additional_id")
+	private AdditionalItem additionalItem;
 
 }
