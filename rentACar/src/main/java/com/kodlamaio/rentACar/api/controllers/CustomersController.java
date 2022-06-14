@@ -1,5 +1,6 @@
 package com.kodlamaio.rentACar.api.controllers;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public class CustomersController {
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody CreateCustomerRequest createCustomerRequest) {
+	public Result add(@RequestBody CreateCustomerRequest createCustomerRequest) throws NumberFormatException, RemoteException {
 		return this.customerService.add(createCustomerRequest);
 	}
 

@@ -1,5 +1,6 @@
 package com.kodlamaio.rentACar.business.concretes;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ import com.kodlamaio.rentACar.business.response.customers.CustomerResponse;
 import com.kodlamaio.rentACar.business.response.customers.ListCustomerResponse;
 import com.kodlamaio.rentACar.core.utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
+import com.kodlamaio.rentACar.core.utilities.results.ErrorResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessDataResult;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessResult;
@@ -33,18 +35,26 @@ public class CustomerManager implements CustomerService {
 	ModelMapperService modelMapperService;
 	CustomerCheckService customerCheckService;
 
-	public CustomerManager(CustomerRepository customerRepository, ModelMapperService modelMapperService,CustomerCheckService customerCheckService) {
+	public CustomerManager(CustomerRepository customerRepository, ModelMapperService modelMapperService,
+			CustomerCheckService customerCheckService) {
 
 		this.customerRepository = customerRepository;
 		this.modelMapperService = modelMapperService;
-		this.customerCheckService=customerCheckService;
+		this.customerCheckService = customerCheckService;
 	}
 
 	@Override
-	public Result add(@RequestBody CreateCustomerRequest createCustomerRequest) {
+	public Result add(@RequestBody CreateCustomerRequest createCustomerRequest) throws NumberFormatException, RemoteException {
 		Customer customer = this.modelMapperService.forRequest().map(createCustomerRequest, Customer.class);
-		this.customerRepository.save(customer);
-		return new SuccessResult("CUSTOMER.ADDED");
+		
+		if(customerCheckService.checkIfRealPerson(createCustomerRequest)){
+			this.customerRepository.save(customer);
+			return new SuccessResult("CUSTOMER.ADDED");
+		}
+		
+		else {
+			return new ErrorResult("CUSTOMER.NOT.ADDED");
+			}
 	}
 
 	@Override
@@ -81,14 +91,12 @@ public class CustomerManager implements CustomerService {
 
 	@Override
 	public DataResult<List<ListCustomerResponse>> getAll(int pageNo, int pageSize) {
-		Pageable pageable=PageRequest.of(pageNo-1, pageSize);
-		List<Customer>customers=this.customerRepository.findAll(pageable).getContent();
-		List<ListCustomerResponse>response=customers.stream()
+		Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+		List<Customer> customers = this.customerRepository.findAll(pageable).getContent();
+		List<ListCustomerResponse> response = customers.stream()
 				.map(customer -> this.modelMapperService.forResponse().map(customer, ListCustomerResponse.class))
 				.collect(Collectors.toList());
 		return new SuccessDataResult<List<ListCustomerResponse>>(response);
-		}
-	
-	
- 
+	}
+
 }
