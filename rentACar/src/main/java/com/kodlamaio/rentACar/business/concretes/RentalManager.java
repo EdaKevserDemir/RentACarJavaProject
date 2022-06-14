@@ -51,28 +51,24 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
-	if (checkIfCarState(createRentalRequest.getCarId())) {
 
 		Rental rental = this.modelMapperService.forRequest().map(createRentalRequest, Rental.class);
-	
-		if (this.checkIfDatesAreCorrect(rental.getPickupDate(), rental.getReturnDate())) {
-			long dayDifference = (rental.getReturnDate().getTime()
-					- rental.getPickupDate().getTime());
-			long time = TimeUnit.DAYS.convert(dayDifference, TimeUnit.MILLISECONDS);
-			Car car = this.carRepository.findById(createRentalRequest.getCarId());
-			car.setState(3);
-			rental.setTotalDays((int)time);
-			double totalPrice = car.getDailyPrice() * time;
-			rental.setTotalPrice(totalPrice);
 
-			this.rentalRepository.save(rental);
-			return new SuccessResult("CAR.RENTED");
+		Car car = this.carRepository.findById(createRentalRequest.getCarId());
+		car.setState(3);
+		long time = calculateTotalDay(rental);
+		rental.setTotalDays((int) time);
+		double totalPrice = car.getDailyPrice() * time;
+		if (rental.getPickCity().getId() != rental.getReturnCity().getId()) {
+			totalPrice = totalPrice + 750;
 		}
+		rental.setTotalPrice(totalPrice);
+		rental.setCar(car);
+		this.rentalRepository.save(rental);
+		return new SuccessResult("CAR.RENTED");
 
 	}
-	return new ErrorResult("CAR.NOT.RENT");
 
-}
 	@Override
 	public Result update(UpdateRentalRequest updateRentalRequest) {
 		Rental rentalToupdate = rentalRepository.findById(updateRentalRequest.getId());
@@ -120,14 +116,6 @@ public class RentalManager implements RentalService {
 				this.modelMapperService.forResponse().map(id, RentalResponse.class));
 	}
 
-	private boolean checkIfDatesAreCorrect(Date pickupDate, Date returnDate) {
-		if (!pickupDate.before(returnDate) )  {
-			return false;
-		} 
-		return true;
-		
-	}
-
 	private boolean checkIfCarState(int id) {
 		Car car = this.carRepository.findById(id);
 		if (car.getState() == 1) {
@@ -137,10 +125,13 @@ public class RentalManager implements RentalService {
 
 	}
 
-	public double calculateTotalPrice(CreateCarRequest createCarRequest, int days) {
-		double totalPrice = 0;
+	private long calculateTotalDay(Rental rental) {
+		long dayDifference = (rental.getReturnDate().getTime() - rental.getPickupDate().getTime());
 
-		return totalPrice = createCarRequest.getDailyPrice() * days;
+		long time = TimeUnit.DAYS.convert(dayDifference, TimeUnit.MILLISECONDS);
+		rental.setTotalDays((int) time);
+		return time;
+
 	}
 
 }

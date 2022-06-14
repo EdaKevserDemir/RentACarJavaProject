@@ -33,10 +33,10 @@ public class Maintenance {
 	private int id;
 	
 	@Column(name="dateSent")
-	private LocalDate dateSent;
+	private Date dateSent;
 	
 	@Column(name="dateReturned")
-	private LocalDate dateReturned;
+	private Date dateReturned;
 	
 	@ManyToOne()
 	@JoinColumn(name="car_id")

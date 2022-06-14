@@ -1,6 +1,5 @@
 package com.kodlamaio.rentACar.business.response.maintenances;
 
-import com.kodlamaio.rentACar.business.response.brands.ListBrandResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

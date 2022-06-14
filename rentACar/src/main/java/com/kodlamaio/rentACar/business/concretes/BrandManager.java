@@ -89,7 +89,6 @@ public class BrandManager implements BrandService {
 		Brand brand = this.brandRepository.findById(id);
 		BrandResponse response = this.modelMapperService.forResponse().map(brand,BrandResponse.class);
 		return new SuccessDataResult<BrandResponse>(response);
-		//return new SuccessDataResult<BrandResponse>(this.modelMapperService.forResponse().map(id, BrandResponse.class));
 	}
 
 	public void checkIfBrandExistsByName(String name) {

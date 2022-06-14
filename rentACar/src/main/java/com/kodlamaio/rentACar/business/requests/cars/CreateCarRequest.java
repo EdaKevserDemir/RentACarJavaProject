@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateCarRequest {
 	private int id;
-	@NotBlank
+
 	
 	private String description;
 	

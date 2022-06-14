@@ -21,4 +21,6 @@ public interface CustomerService {
 	
 	DataResult<List<ListCustomerResponse>> getAll();
 
+	DataResult<List<ListCustomerResponse>> getAll(int pageNo,int pageSize);
+
 }

@@ -22,8 +22,10 @@ import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessDataResult;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessResult;
+import com.kodlamaio.rentACar.dataAccess.abstracts.AdditionalItemRepository;
 import com.kodlamaio.rentACar.dataAccess.abstracts.AdditionalRepository;
 import com.kodlamaio.rentACar.entitites.concretes.Additional;
+import com.kodlamaio.rentACar.entitites.concretes.AdditionalItem;
 import com.kodlamaio.rentACar.entitites.concretes.Brand;
 
 @Service
@@ -34,10 +36,17 @@ public class AdditionalManager implements AdditionalService {
 
 	@Autowired
 	ModelMapperService modelMapperService;
+	
+	@Autowired
+	AdditionalItemRepository additionalItemRepository;
 
 	@Override
 	public Result add(CreateAdditionalRequest createAdditionalRequest) {
 		Additional additional = this.modelMapperService.forRequest().map(createAdditionalRequest, Additional.class);
+		AdditionalItem additionalItem=this.additionalItemRepository.findById(createAdditionalRequest.getAdditionalItemId());
+		int days=additional.getTotalDays();
+		double totalPrice=additionalItem.getDailyPrice()*days;
+		additional.setTotalPrice(totalPrice);		
 		this.additionalRepository.save(additional);
 		return new SuccessResult("ADDITIONAL.ADDED");
 	}

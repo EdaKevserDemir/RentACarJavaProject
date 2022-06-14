@@ -23,30 +23,31 @@ import com.kodlamaio.rentACar.core.utilities.results.Result;
 @RequestMapping("/api/additionalitems")
 public class AdditionalItemsController {
 
-	AdditionalItemService additionalService;
+	@Autowired
+	AdditionalItemService additionalItemService;
 
 	@PostMapping("/add")
 	public Result add(@RequestBody CreateAddionalItemRequest createAddionalItemRequest) {
-		return this.additionalService.add(createAddionalItemRequest);
+		return this.additionalItemService.add(createAddionalItemRequest);
 
 	}
 	@PostMapping("/update")
 	public Result update(@RequestBody UpdateAdditionalItemRequest updateAdditionalItemRequest) {
-		return this.additionalService.update(updateAdditionalItemRequest);
+		return this.additionalItemService.update(updateAdditionalItemRequest);
 
 	}
 	@PostMapping("/delete")
 	public Result delete(@RequestBody DeleteAdditionalItemRequest deleteAdditionalItemRequest) {
-		return this.additionalService.delete(deleteAdditionalItemRequest);
+		return this.additionalItemService.delete(deleteAdditionalItemRequest);
 
 	}
 	@GetMapping("/getall")
 	public DataResult<List<ListAdditionalItemResponse>>getAll(){
-		return this.additionalService.getAll();
+		return this.additionalItemService.getAll();
 	}
 	@GetMapping("/getbyid")
 	public DataResult<AdditionalItemResponse>getById(@RequestParam int id){
-		return this.additionalService.getById(id);
+		return this.additionalItemService.getById(id);
 	}
 
 }
