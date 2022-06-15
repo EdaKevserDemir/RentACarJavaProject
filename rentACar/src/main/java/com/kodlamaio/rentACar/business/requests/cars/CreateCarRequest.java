@@ -26,5 +26,6 @@ public class CreateCarRequest {
 	private String carPlate;
 	private int maintenanceId;
 	private int state;
+	private int minFindeksScore;
 
 }

@@ -15,4 +15,5 @@ public class UpdateCustomerRequest {
 	private String eMail;
 	private String password;
 	private int birthYear;
+	private int minfindeksScore;
 }

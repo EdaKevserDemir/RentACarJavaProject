@@ -1,5 +1,6 @@
 package com.kodlamaio.rentACar.business.abstracts;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 import com.kodlamaio.rentACar.business.requests.rentals.CreateRentalRequest;
@@ -12,7 +13,7 @@ import com.kodlamaio.rentACar.core.utilities.results.Result;
 import com.kodlamaio.rentACar.entitites.concretes.Rental;
 
 public interface RentalService {
-	Result add(CreateRentalRequest createRentalRequest);
+	Result add(CreateRentalRequest createRentalRequest) throws NumberFormatException, RemoteException;
 
 	Result update(UpdateRentalRequest updateRentalRequest);
 

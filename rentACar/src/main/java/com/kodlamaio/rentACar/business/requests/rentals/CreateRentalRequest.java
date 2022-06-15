@@ -21,4 +21,5 @@ private int totalDays;
 private double totalPrice;
 private int pickUpCityId;
 private int returnCityId;
+private int customerId;
 }

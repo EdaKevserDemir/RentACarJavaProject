@@ -21,5 +21,6 @@ public class CreateCustomerRequest {
 	private String eMail;
 	private String password;
 	private int birthYear;
+	private int minfindeksScore;
 
 }

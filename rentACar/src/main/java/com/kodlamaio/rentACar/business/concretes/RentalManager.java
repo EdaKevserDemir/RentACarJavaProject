@@ -1,5 +1,6 @@
 package com.kodlamaio.rentACar.business.concretes;
 
+import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -8,8 +9,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kodlamaio.rentACar.business.abstracts.FindeksScoreCheckService;
 import com.kodlamaio.rentACar.business.abstracts.RentalService;
 import com.kodlamaio.rentACar.business.requests.cars.CreateCarRequest;
 import com.kodlamaio.rentACar.business.requests.rentals.CreateRentalRequest;
@@ -19,6 +22,7 @@ import com.kodlamaio.rentACar.business.response.maintenances.ListMaintenanceResp
 import com.kodlamaio.rentACar.business.response.maintenances.MaintenanceResponse;
 import com.kodlamaio.rentACar.business.response.rentals.ListRentalResponse;
 import com.kodlamaio.rentACar.business.response.rentals.RentalResponse;
+import com.kodlamaio.rentACar.core.adapters.FindeksServiceAdapter;
 import com.kodlamaio.rentACar.core.utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.ErrorResult;
@@ -26,46 +30,49 @@ import com.kodlamaio.rentACar.core.utilities.results.Result;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessDataResult;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessResult;
 import com.kodlamaio.rentACar.dataAccess.abstracts.CarRepository;
+import com.kodlamaio.rentACar.dataAccess.abstracts.CustomerRepository;
 import com.kodlamaio.rentACar.dataAccess.abstracts.RentalRepository;
 import com.kodlamaio.rentACar.entitites.concretes.Car;
+import com.kodlamaio.rentACar.entitites.concretes.Customer;
 import com.kodlamaio.rentACar.entitites.concretes.Maintenance;
 import com.kodlamaio.rentACar.entitites.concretes.Rental;
 
 @Service
 public class RentalManager implements RentalService {
 
+	@Autowired
 	RentalRepository rentalRepository;
-
+	@Autowired
 	CarRepository carRepository;
-
+	@Autowired
 	ModelMapperService modelMapperService;
-
-	public RentalManager(RentalRepository rentalRepository, CarRepository carRepository,
-			ModelMapperService modelMapperService) {
-
-		this.rentalRepository = rentalRepository;
-		this.carRepository = carRepository;
-		this.modelMapperService = modelMapperService;
-
-	}
+	@Autowired
+	CustomerRepository customerRepository;
+	@Autowired
+	FindeksScoreCheckService findeksScoreCheckService;
 
 	@Override
-	public Result add(CreateRentalRequest createRentalRequest) {
+	public Result add(CreateRentalRequest createRentalRequest) throws NumberFormatException, RemoteException {
 
 		Rental rental = this.modelMapperService.forRequest().map(createRentalRequest, Rental.class);
-
+		Customer customer = this.customerRepository.findByid(createRentalRequest.getCustomerId());
 		Car car = this.carRepository.findById(createRentalRequest.getCarId());
-		car.setState(3);
-		long time = calculateTotalDay(rental);
-		rental.setTotalDays((int) time);
-		double totalPrice = car.getDailyPrice() * time;
-		if (rental.getPickCity().getId() != rental.getReturnCity().getId()) {
-			totalPrice = totalPrice + 750;
+		if (checkFindexMinValue(car.getMinFindeksScore(), customer.getIdentity())) {
+			car.setState(3);
+			long time = calculateTotalDay(rental);
+			rental.setTotalDays((int) time);
+			double totalPrice = car.getDailyPrice() * time;
+			if (rental.getPickCity().getId() != rental.getReturnCity().getId()) {
+				totalPrice = totalPrice + 750;
+			}
+			rental.setTotalPrice(totalPrice);
+			rental.setCar(car);
+
+			rentalRepository.save(rental);
+			return new Result(true, "CAR.RENTED");
+		} else {
+			return new Result(false, "findex puanı yetersiz");
 		}
-		rental.setTotalPrice(totalPrice);
-		rental.setCar(car);
-		this.rentalRepository.save(rental);
-		return new SuccessResult("CAR.RENTED");
 
 	}
 
@@ -75,17 +82,6 @@ public class RentalManager implements RentalService {
 
 		Car car = carRepository.findById(updateRentalRequest.getCarId());
 		car.setId(updateRentalRequest.getCarId());
-//		rentalToupdate.setCar(car);
-//
-		LocalDate date = LocalDate.now();
-//
-//		if (date.equals(rentalToupdate.getReturnDate()) || date.isBefore(rentalToupdate.getPickupDate())
-//				|| date.isAfter(rentalToupdate.getReturnDate())) {
-//			car.setState(1);
-//
-//		} else {
-//			car.setState(3);
-//		}
 
 		this.rentalRepository.save(rentalToupdate);
 		return new SuccessResult("update edildi");
@@ -116,14 +112,7 @@ public class RentalManager implements RentalService {
 				this.modelMapperService.forResponse().map(id, RentalResponse.class));
 	}
 
-	private boolean checkIfCarState(int id) {
-		Car car = this.carRepository.findById(id);
-		if (car.getState() == 1) {
-			return true;
-		}
-		return false;
 
-	}
 
 	private long calculateTotalDay(Rental rental) {
 		long dayDifference = (rental.getReturnDate().getTime() - rental.getPickupDate().getTime());
@@ -134,4 +123,13 @@ public class RentalManager implements RentalService {
 
 	}
 
+	public boolean checkFindexMinValue(int score, String tc) throws NumberFormatException, RemoteException {
+		boolean state = false;
+		if (findeksScoreCheckService.checkIfFindeksScore(tc) > score) {
+			state = true;
+		} else {
+			state = false;
+		}
+		return state;
+	}
 }

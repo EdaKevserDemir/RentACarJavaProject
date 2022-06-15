@@ -37,6 +37,11 @@ public class Car {
 	
 	@Column(name = "dailyPrice")
 	private double dailyPrice;
+	
+	
+	@Column(name="minFindeksScore")
+	private int minFindeksScore;
+	
 
 	@ManyToOne
 	@JoinColumn(name = "brand_id")

@@ -15,4 +15,6 @@ public class UpdateRentalRequest {
 	private LocalDate returnDate;
 	private int totalDays;
 	private double totalPrice;
+	private int customerId;
+	
 }
