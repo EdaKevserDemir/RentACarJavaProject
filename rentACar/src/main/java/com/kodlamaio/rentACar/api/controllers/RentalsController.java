@@ -13,6 +13,7 @@ import com.kodlamaio.rentACar.business.abstracts.RentalService;
 import com.kodlamaio.rentACar.business.requests.rentals.CreateRentalRequest;
 import com.kodlamaio.rentACar.business.requests.rentals.DeleteRentalRequest;
 import com.kodlamaio.rentACar.business.requests.rentals.UpdateRentalRequest;
+import com.kodlamaio.rentACar.business.response.cars.GetAllCarResponse;
 import com.kodlamaio.rentACar.business.response.rentals.ListRentalResponse;
 import com.kodlamaio.rentACar.business.response.rentals.RentalResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
@@ -54,6 +55,11 @@ public class RentalsController {
 	@GetMapping("/getbyid")
 	public DataResult<RentalResponse>getId(@RequestBody int  id){
 		return this.rentalService.getById(id);
+	}
+	@GetMapping("/getallbyfindeksscore")
+	private DataResult<List<GetAllCarResponse>> getAllByFindeksScore() {
+		return rentalService.getAllByFindeksScore();
+	
 	}
 			
 }

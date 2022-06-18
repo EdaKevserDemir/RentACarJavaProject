@@ -18,6 +18,7 @@ import com.kodlamaio.rentACar.business.requests.cars.CreateCarRequest;
 import com.kodlamaio.rentACar.business.requests.rentals.CreateRentalRequest;
 import com.kodlamaio.rentACar.business.requests.rentals.DeleteRentalRequest;
 import com.kodlamaio.rentACar.business.requests.rentals.UpdateRentalRequest;
+import com.kodlamaio.rentACar.business.response.cars.GetAllCarResponse;
 import com.kodlamaio.rentACar.business.response.maintenances.ListMaintenanceResponse;
 import com.kodlamaio.rentACar.business.response.maintenances.MaintenanceResponse;
 import com.kodlamaio.rentACar.business.response.rentals.ListRentalResponse;
@@ -132,4 +133,17 @@ public class RentalManager implements RentalService {
 		}
 		return state;
 	}
+
+	@Override
+	public DataResult<List<GetAllCarResponse>> getAllByFindeksScore() {
+		List<Rental> rentals = this.rentalRepository.findAll();
+
+		List<GetAllCarResponse> response = rentals.stream()
+				.map(rental -> this.modelMapperService.forResponse().map(rental, GetAllCarResponse.class)).sorted()
+				.collect(Collectors.toList());
+
+		return new SuccessDataResult<List<GetAllCarResponse>>(response);
+	}
+
+	
 }

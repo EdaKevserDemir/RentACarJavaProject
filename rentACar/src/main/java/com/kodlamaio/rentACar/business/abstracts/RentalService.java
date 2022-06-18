@@ -6,6 +6,7 @@ import java.util.List;
 import com.kodlamaio.rentACar.business.requests.rentals.CreateRentalRequest;
 import com.kodlamaio.rentACar.business.requests.rentals.DeleteRentalRequest;
 import com.kodlamaio.rentACar.business.requests.rentals.UpdateRentalRequest;
+import com.kodlamaio.rentACar.business.response.cars.GetAllCarResponse;
 import com.kodlamaio.rentACar.business.response.rentals.ListRentalResponse;
 import com.kodlamaio.rentACar.business.response.rentals.RentalResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
@@ -20,6 +21,8 @@ public interface RentalService {
 	Result delete(DeleteRentalRequest deleteRentalRequest);
 
 	DataResult<List<ListRentalResponse>> getAll();
+
+	DataResult<List<GetAllCarResponse>>getAllByFindeksScore();
 
 	DataResult<RentalResponse> getById(int id);
 

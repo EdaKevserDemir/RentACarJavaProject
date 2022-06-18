@@ -12,35 +12,36 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.web.bind.annotation.Mapping;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "additional")
-public class Additional {
+@Table(name = "invoices")
+public class Invoice {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-
-	@Column(name = "id")
+	
+	@Column(name="id")
 	private int id;
-
-	@Column(name = "totalPrice")
-	private double totalPrice;
-
-	@Column(name = "totalDays")
-	private int totalDays;
+	
+	@Column(name="invoiceNumber")
+	private String invoiceNumber;
 	
 	@ManyToOne
-	@JoinColumn(name = "additionalItem_id")
-	private AdditionalItem additionalItem;
-	
-	@OneToMany(mappedBy = "additional")
-	private List<RentalDetail>rentalDetails;
+	@JoinColumn(name="rental_details_id")
+	private RentalDetail rentalDetail;
 
+	
+	
+	
+	
+	
+
+	
+	
 }
