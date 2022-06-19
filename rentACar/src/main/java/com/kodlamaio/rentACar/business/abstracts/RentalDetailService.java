@@ -14,7 +14,7 @@ public interface RentalDetailService {
 	Result add(CreateRentalDetailRequest createRentalDetailRequest);
 	Result update(UpdateRentalDetailRequest updateRentalDetailRequest);
 	Result delete(DeleteRentalDetailRequest deleteRentalDetailRequest);
-	DataResult<RentalDetailResponse> getById();
+	DataResult<RentalDetailResponse> getById(int id);
 	DataResult<List<ListRentalDetailsResponse>>getAll();
 
 }

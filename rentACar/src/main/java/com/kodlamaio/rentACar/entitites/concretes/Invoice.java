@@ -36,6 +36,7 @@ public class Invoice {
 	@JoinColumn(name="rental_details_id")
 	private RentalDetail rentalDetail;
 
+
 	
 	
 	

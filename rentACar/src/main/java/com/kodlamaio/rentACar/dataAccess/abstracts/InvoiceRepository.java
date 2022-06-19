@@ -10,7 +10,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer>{
 	
 //	@Query("Select r.totalPrice from rentals r  join invoices i r.id=i.rental_id group by rental_id ")
 //	RentalDetails getByTotalPrice(int id);
-
+    Invoice findById(int id);
 	
 	
 }

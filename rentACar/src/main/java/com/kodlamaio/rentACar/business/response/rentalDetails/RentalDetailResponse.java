@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 public class RentalDetailResponse {
 
 	private int id;
+	private int additionalId; 
+	private int rentalId;
 
 
 }

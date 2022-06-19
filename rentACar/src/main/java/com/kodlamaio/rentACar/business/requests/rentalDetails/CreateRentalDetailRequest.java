@@ -1,8 +1,5 @@
 package com.kodlamaio.rentACar.business.requests.rentalDetails;
 
-import com.kodlamaio.rentACar.entitites.concretes.Additional;
-import com.kodlamaio.rentACar.entitites.concretes.Rental;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,9 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateRentalDetailRequest {
 	private int id;
-	private double sumTotalPrice;
-	private Additional additional; 
-	private Rental rental;
+	private int additionalId; 
+	private int rentalId;
 	
 
 }

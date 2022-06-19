@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class InvoiceResponse {
 	private int id;
 	private String invoiceNumber;
-	private RentalDetail rentalDetail;
+	private int rentalDetailId;
 }

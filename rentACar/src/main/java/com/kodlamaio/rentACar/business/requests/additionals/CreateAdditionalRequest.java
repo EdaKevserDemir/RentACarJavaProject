@@ -12,9 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateAdditionalRequest {
 	private int id;
-	@Min(20)
-	private double totalPrice;
-	private int totalDays;
+	
 	private int additionalItemId;
 
 }

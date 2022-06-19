@@ -12,9 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateRentalDetailRequest {
 	private int id;
-	private double sumTotalPrice;
-	private Additional additional; 
-	private Rental rental;
+	private int additionalId; 
+	private int rentalId;
 	
 
 }

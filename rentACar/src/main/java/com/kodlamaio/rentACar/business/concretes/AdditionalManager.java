@@ -47,6 +47,7 @@ public class AdditionalManager implements AdditionalService {
 		int days=additional.getTotalDays();
 		double totalPrice=additionalItem.getDailyPrice()*days;
 		additional.setTotalPrice(totalPrice);		
+		additional.setAdditionalItem(additionalItem);
 		this.additionalRepository.save(additional);
 		return new SuccessResult("ADDITIONAL.ADDED");
 	}
@@ -80,5 +81,6 @@ public class AdditionalManager implements AdditionalService {
 				.collect(Collectors.toList());
 		return new SuccessDataResult<List<ListAdditionalResponse>>(response);
 	}
+	
 
 }
