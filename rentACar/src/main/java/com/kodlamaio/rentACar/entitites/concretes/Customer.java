@@ -41,6 +41,9 @@ public class Customer {
 	@Column(name="birthYear")
 	private int birthYear;
 
+	@OneToMany(mappedBy="customer")
+	private List<Address> addresses;
+	
 	@OneToMany(mappedBy = "customer")
 	private List<Rental> rentals;
 

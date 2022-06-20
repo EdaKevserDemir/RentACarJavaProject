@@ -30,16 +30,11 @@ import com.kodlamaio.rentACar.entitites.concretes.Maintenance;
 public class CarManager implements CarService {
 
 
-
+	@Autowired
 	private CarRepository carRepository;
+	@Autowired
 	private ModelMapperService modelMapperService;
 
-	@Autowired
-	public CarManager(CarRepository carRepository, ModelMapperService modelMapperService) {
-		this.carRepository = carRepository;
-		this.modelMapperService = modelMapperService;
-
-	}
 
 	@Override
 	public Result add(CreateCarRequest createCarRequest) {
