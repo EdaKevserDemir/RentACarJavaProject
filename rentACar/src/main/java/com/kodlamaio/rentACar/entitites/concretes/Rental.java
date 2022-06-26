@@ -1,6 +1,5 @@
 package com.kodlamaio.rentACar.entitites.concretes;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +23,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "cars" })
 
 @Table(name = "rentals")
 public class Rental {
@@ -62,10 +60,9 @@ public class Rental {
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 	
-
-	@OneToMany(mappedBy = "rental")
-	private List<RentalDetail>rentalDetails;
 	
+	@OneToMany(mappedBy = "rental")
+	private List<Invoice>invoices;
 	
 	
 

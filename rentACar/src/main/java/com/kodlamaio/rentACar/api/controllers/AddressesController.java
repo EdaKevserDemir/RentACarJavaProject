@@ -1,5 +1,7 @@
 package com.kodlamaio.rentACar.api.controllers;
 
+import javax.validation.Valid;
+
 import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kodlamaio.rentACar.business.abstracts.AddressService;
-import com.kodlamaio.rentACar.business.requests.addresses.CreateAddressRequest;
+import com.kodlamaio.rentACar.business.requests.addresses.CreateDifferentAddressRequest;
+import com.kodlamaio.rentACar.business.requests.addresses.CreateSameAddressRequest;
 import com.kodlamaio.rentACar.business.requests.addresses.DeleteAddressRequest;
-import com.kodlamaio.rentACar.business.requests.addresses.UpdateAddressRequest;
-import com.kodlamaio.rentACar.business.response.addresses.AddressResponse;
+import com.kodlamaio.rentACar.business.requests.addresses.UpdateDifferentAddressRequest;
+import com.kodlamaio.rentACar.business.requests.addresses.UpdateSameAddressRequest;
+import com.kodlamaio.rentACar.business.response.addresses.ReadAddressResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
 
@@ -24,24 +28,27 @@ public class AddressesController {
 	AddressService addressService;
 
 	@PostMapping("/addsameaddress")
-	private Result addSameAddress(@RequestBody CreateAddressRequest createAddressRequest) {
-		return this.addressService.addSameAddress(createAddressRequest);
+	private Result addSameAddress(@RequestBody @Valid CreateSameAddressRequest createSameAddressRequest) {
+		return this.addressService.addSameAddress(createSameAddressRequest);
 	}
+
 	@PostMapping("/adddifferentaddress")
-	private Result addDifferentAddress(@RequestBody CreateAddressRequest createAddressRequest) {
-		return this.addressService.addDifferentAddress(createAddressRequest);
+	private Result addDifferentAddress(
+			@RequestBody @Valid CreateDifferentAddressRequest createDifferentAddressRequest) {
+		return this.addressService.addDifferentAddress(createDifferentAddressRequest);
+	}
+
+	@PostMapping("/updatesameaddress")
+	private Result updateSameAddress(@RequestBody @Valid UpdateSameAddressRequest updateSameAddressRequest) {
+
+		return this.addressService.updateSameAddress(updateSameAddressRequest);
+
 	}
 
 	@PostMapping("/updatedifferentaddress")
-	private Result updateDifferentAddress(@RequestBody UpdateAddressRequest updateAddressRequest) {
-
-		return this.addressService.updateDifferentAddress(updateAddressRequest);
-
-	}
-	@PostMapping("/updatesameaddress")
-	private Result updateSameAddress(@RequestBody UpdateAddressRequest updateAddressRequest) {
-
-		return this.addressService.updateSameAddress(updateAddressRequest);
+	private Result updateDifferentAddress(
+			@RequestBody @Valid UpdateDifferentAddressRequest updateDifferentAddressRequest) {
+		return this.addressService.updateDifferentAddress(updateDifferentAddressRequest);
 
 	}
 
@@ -50,11 +57,11 @@ public class AddressesController {
 
 		return this.addressService.delete(deleteAddressRequest);
 	}
-	
+
 	@GetMapping("/getbyid")
-	private DataResult<AddressResponse>getById(int id){
-		
-		return null;
-		
+	private DataResult<ReadAddressResponse> getById(int id) {
+
+		return addressService.getById(id);
+
 	}
 }

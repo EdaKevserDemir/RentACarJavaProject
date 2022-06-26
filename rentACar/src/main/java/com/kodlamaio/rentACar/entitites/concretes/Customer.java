@@ -4,46 +4,34 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EqualsAndHashCode(callSuper = false)
+@PrimaryKeyJoinColumn(name = "customerId",referencedColumnName = "id")
 @Table(name = "customers")
 
-public class Customer {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Customer  extends User{
 	
-	@Column(name="id")
-	private int id;
-	@Column(name="firstName")
-	private String firstName;
-	@Column(name="lastName")
-	private String lastName;
-	@Column(name="Identity")
-	private String identity;
-	@Column(name="eMail")
-	private String eMail;
-	@Column(name="password")
-	private String password;
-	@Column(name="birthYear")
-	private int birthYear;
-
-	@OneToMany(mappedBy="customer")
+	@Column(name = "customerId",insertable = false,updatable = false)
+	private int customerId;
+	
+	@Column(name="customerNumber")
+	private int customerNumber;
+	
+	@OneToMany(mappedBy = "customer")
 	private List<Address> addresses;
-	
+
 	@OneToMany(mappedBy = "customer")
 	private List<Rental> rentals;
 

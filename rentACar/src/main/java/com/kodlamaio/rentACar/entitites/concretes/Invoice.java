@@ -1,6 +1,6 @@
 package com.kodlamaio.rentACar.entitites.concretes;
 
-import java.util.List;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -25,24 +24,24 @@ public class Invoice {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="id")
+
+	@Column(name = "id")
 	private int id;
-	
-	@Column(name="invoiceNumber")
+
+	@Column(name = "invoiceNumber")
 	private String invoiceNumber;
+
+	@Column(name = "state")
+	private int state;
+
+	@Column(name = "invoiceDate")
+	private Date invoiceDate;
 	
+	@Column(name = "sumTotalPrice")
+	private double sumTotalPrice;
+
 	@ManyToOne
-	@JoinColumn(name="rental_details_id")
-	private RentalDetail rentalDetail;
+	@JoinColumn(name="rentalId")
+	private Rental rental;
 
-
-	
-	
-	
-	
-	
-
-	
-	
 }

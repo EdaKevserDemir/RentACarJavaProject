@@ -1,20 +1,16 @@
 package com.kodlamaio.rentACar.business.concretes;
 
 import java.util.List;
-
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kodlamaio.rentACar.business.abstracts.BrandService;
 import com.kodlamaio.rentACar.business.requests.brands.CreateBrandRequest;
 import com.kodlamaio.rentACar.business.requests.brands.DeleteBrandRequest;
 import com.kodlamaio.rentACar.business.requests.brands.UpdateBrandRequest;
-import com.kodlamaio.rentACar.business.response.brands.BrandResponse;
-import com.kodlamaio.rentACar.business.response.brands.ListBrandResponse;
-import com.kodlamaio.rentACar.business.response.cars.CarResponse;
-import com.kodlamaio.rentACar.business.response.colors.ColorResponse;
+import com.kodlamaio.rentACar.business.response.brands.ReadBrandResponse;
+import com.kodlamaio.rentACar.business.response.brands.GetAllBrandResponse;
 import com.kodlamaio.rentACar.core.utilities.exceptions.BusinessException;
 import com.kodlamaio.rentACar.core.utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
@@ -23,7 +19,9 @@ import com.kodlamaio.rentACar.core.utilities.results.SuccessDataResult;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessResult;
 import com.kodlamaio.rentACar.dataAccess.abstracts.BrandRepository;
 import com.kodlamaio.rentACar.entitites.concretes.Brand;
-import com.kodlamaio.rentACar.entitites.concretes.Car;
+import com.kodlamaio.rentACar.entitites.concretes.Rental;
+
+//Id,name
 
 @Service
 public class BrandManager implements BrandService {
@@ -40,13 +38,7 @@ public class BrandManager implements BrandService {
 
 	@Override
 	public Result add(CreateBrandRequest createBrandRequest) {
-
-		// Brand brand = new Brand();
-		// brand.setName(createBrandRequest.getName()); // gelen requesti veri tabanı
-		// nesnesine çevirdi.Mapping yapıldı.
-
 		checkIfBrandExistsByName(createBrandRequest.getName());
-
 		Brand brand = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
 		this.brandRepository.save(brand);
 		return new SuccessResult("BRAND.ADDED");
@@ -54,7 +46,7 @@ public class BrandManager implements BrandService {
 
 	@Override
 	public Result delete(DeleteBrandRequest deleteBrandRequest) {
-
+		checkIfExistBrandId(deleteBrandRequest.getId());
 		brandRepository.deleteById(deleteBrandRequest.getId());
 		return new SuccessResult("deleted");
 
@@ -62,39 +54,44 @@ public class BrandManager implements BrandService {
 
 	@Override
 	public Result update(UpdateBrandRequest updateBrandRequest) {
-
-//		Brand brand = getById(updateBrandRequest.getId());
-//		brand.setName(updateBrandRequest.getName());
-		// brand.setCars(createBrandRequest);
-
+		checkIfExistBrandId(updateBrandRequest.getId());
+		checkIfBrandExistsByName(updateBrandRequest.getName());
 		Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
 		this.brandRepository.save(brand);
 		return new SuccessResult("updated");
 	}
 
 	@Override
-	public DataResult<List<ListBrandResponse>> getAll() {
-
+	public DataResult<List<GetAllBrandResponse>> getAll() {
 		List<Brand> brands = this.brandRepository.findAll();
-
-		List<ListBrandResponse> response = brands.stream()
-				.map(brand -> this.modelMapperService.forResponse().map(brand, ListBrandResponse.class))
+		List<GetAllBrandResponse> response = brands.stream()
+				.map(brand -> this.modelMapperService.forResponse().map(brand, GetAllBrandResponse.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListBrandResponse>>(response);
+		return new SuccessDataResult<List<GetAllBrandResponse>>(response);
 	}
 
 	@Override
-	public DataResult<BrandResponse> getById(int id) {
+	public DataResult<ReadBrandResponse> getById(int id) {
 		Brand brand = this.brandRepository.findById(id);
-		BrandResponse response = this.modelMapperService.forResponse().map(brand,BrandResponse.class);
-		return new SuccessDataResult<BrandResponse>(response);
+		ReadBrandResponse response = this.modelMapperService.forResponse().map(brand, ReadBrandResponse.class);
+		return new SuccessDataResult<ReadBrandResponse>(response);
 	}
 
-	public void checkIfBrandExistsByName(String name) {
+	//Checking for name
+	private void checkIfBrandExistsByName(String name) {
 		Brand currentBrand = this.brandRepository.findByName(name);
-		if (currentBrand != null) {
+		if (currentBrand == null) {
 			throw new BusinessException("BRAND.EXISTS");
 		}
+	}
+
+	//checking for brandId
+	private void checkIfExistBrandId(int id) {
+		Brand brand = this.brandRepository.findById(id);
+		if (brand == null) {
+			throw new BusinessException("BRAND.ID.NOT.FOUND");
+		}
+
 	}
 }

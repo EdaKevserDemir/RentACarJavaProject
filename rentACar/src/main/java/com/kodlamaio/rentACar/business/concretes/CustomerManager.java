@@ -14,10 +14,8 @@ import com.kodlamaio.rentACar.business.abstracts.CustomerService;
 import com.kodlamaio.rentACar.business.requests.customers.CreateCustomerRequest;
 import com.kodlamaio.rentACar.business.requests.customers.DeleteCustomerRequest;
 import com.kodlamaio.rentACar.business.requests.customers.UpdateCustomerRequest;
-import com.kodlamaio.rentACar.business.response.additionalItems.ListAdditionalItemResponse;
-import com.kodlamaio.rentACar.business.response.cars.ListCarResponse;
-import com.kodlamaio.rentACar.business.response.customers.CustomerResponse;
-import com.kodlamaio.rentACar.business.response.customers.ListCustomerResponse;
+import com.kodlamaio.rentACar.business.response.customers.GetAllCustomerResponse;
+import com.kodlamaio.rentACar.business.response.customers.ReadCustomerResponse;
 import com.kodlamaio.rentACar.core.utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.ErrorResult;
@@ -25,7 +23,6 @@ import com.kodlamaio.rentACar.core.utilities.results.Result;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessDataResult;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessResult;
 import com.kodlamaio.rentACar.dataAccess.abstracts.CustomerRepository;
-import com.kodlamaio.rentACar.entitites.concretes.Car;
 import com.kodlamaio.rentACar.entitites.concretes.Customer;
 
 @Service
@@ -73,30 +70,30 @@ public class CustomerManager implements CustomerService {
 	}
 
 	@Override
-	public DataResult<CustomerResponse> getById(int id) {
-		Customer customer = this.customerRepository.findByid(id);
-		CustomerResponse response = this.modelMapperService.forResponse().map(customer, CustomerResponse.class);
-		return new SuccessDataResult<CustomerResponse>(response);
+	public DataResult<ReadCustomerResponse> getById(int id) {
+		Customer customer = this.customerRepository.findById(id).get();
+		ReadCustomerResponse response = this.modelMapperService.forResponse().map(customer, ReadCustomerResponse.class);
+		return new SuccessDataResult<ReadCustomerResponse>(response);
 	}
 
 	@Override
-	public DataResult<List<ListCustomerResponse>> getAll() {
+	public DataResult<List<GetAllCustomerResponse>> getAll() {
 		List<Customer> customers = this.customerRepository.findAll();
-		List<ListCustomerResponse> response = customers.stream()
-				.map(customer -> this.modelMapperService.forResponse().map(customer, ListCustomerResponse.class))
+		List<GetAllCustomerResponse> response = customers.stream()
+				.map(customer -> this.modelMapperService.forResponse().map(customer, GetAllCustomerResponse.class))
 				.collect(Collectors.toList());
-		return new SuccessDataResult<List<ListCustomerResponse>>(response);
+		return new SuccessDataResult<List<GetAllCustomerResponse>>(response);
 
 	}
 
 	@Override
-	public DataResult<List<ListCustomerResponse>> getAll(int pageNo, int pageSize) {
+	public DataResult<List<GetAllCustomerResponse>> getAll(int pageNo, int pageSize) {
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
 		List<Customer> customers = this.customerRepository.findAll(pageable).getContent();
-		List<ListCustomerResponse> response = customers.stream()
-				.map(customer -> this.modelMapperService.forResponse().map(customer, ListCustomerResponse.class))
+		List<GetAllCustomerResponse> response = customers.stream()
+				.map(customer -> this.modelMapperService.forResponse().map(customer, GetAllCustomerResponse.class))
 				.collect(Collectors.toList());
-		return new SuccessDataResult<List<ListCustomerResponse>>(response);
+		return new SuccessDataResult<List<GetAllCustomerResponse>>(response);
 	}
 
 }

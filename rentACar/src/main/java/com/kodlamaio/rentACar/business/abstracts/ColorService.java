@@ -5,8 +5,8 @@ import java.util.List;
 import com.kodlamaio.rentACar.business.requests.colors.CreateColorRequest;
 import com.kodlamaio.rentACar.business.requests.colors.DeleteColorRequest;
 import com.kodlamaio.rentACar.business.requests.colors.UpdateColorRequest;
-import com.kodlamaio.rentACar.business.response.colors.ColorResponse;
-import com.kodlamaio.rentACar.business.response.colors.ListColorResponse;
+import com.kodlamaio.rentACar.business.response.colors.ReadColorResponse;
+import com.kodlamaio.rentACar.business.response.colors.GetAllColorResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
 
@@ -18,8 +18,8 @@ public interface ColorService {
 
 	Result update(UpdateColorRequest updateColorRequest);
 
-	DataResult<List<ListColorResponse>> getAll();
+	DataResult<List<GetAllColorResponse>> getAll();
 
-	DataResult<ColorResponse> getById(int id);
+	DataResult<ReadColorResponse> getById(int id);
 
 }

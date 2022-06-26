@@ -6,8 +6,8 @@ import java.util.List;
 import com.kodlamaio.rentACar.business.requests.customers.CreateCustomerRequest;
 import com.kodlamaio.rentACar.business.requests.customers.DeleteCustomerRequest;
 import com.kodlamaio.rentACar.business.requests.customers.UpdateCustomerRequest;
-import com.kodlamaio.rentACar.business.response.customers.CustomerResponse;
-import com.kodlamaio.rentACar.business.response.customers.ListCustomerResponse;
+import com.kodlamaio.rentACar.business.response.customers.ReadCustomerResponse;
+import com.kodlamaio.rentACar.business.response.customers.GetAllCustomerResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
 
@@ -18,10 +18,10 @@ public interface CustomerService {
 
 	Result delete(DeleteCustomerRequest deleteCustomerRequest);
 
-	DataResult<CustomerResponse> getById(int id);
+	DataResult<ReadCustomerResponse> getById(int id);
 	
-	DataResult<List<ListCustomerResponse>> getAll();
+	DataResult<List<GetAllCustomerResponse>> getAll();
 
-	DataResult<List<ListCustomerResponse>> getAll(int pageNo,int pageSize);
+	DataResult<List<GetAllCustomerResponse>> getAll(int pageNo,int pageSize);
 
 }

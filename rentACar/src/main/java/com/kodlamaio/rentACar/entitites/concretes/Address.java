@@ -24,8 +24,10 @@ public class Address {
 
 	@Column(name="id")
 	private int id;
+	
 	@Column(name="contactAddress")
 	private String contactAddress;
+	
 	@Column(name="invoiceAddress")
 	private String invoiceAddress;
 	

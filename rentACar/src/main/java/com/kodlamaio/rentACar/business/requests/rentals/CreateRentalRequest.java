@@ -3,7 +3,9 @@ package com.kodlamaio.rentACar.business.requests.rentals;
 import java.time.LocalDate;
 import java.util.Date;
 
-import com.kodlamaio.rentACar.business.response.rentals.ListRentalResponse;
+import javax.validation.constraints.Min;
+
+import com.kodlamaio.rentACar.business.response.rentals.GetAllRentalResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +19,7 @@ private int id;
 private int carId;
 private Date pickupDate;
 private Date returnDate;
+@Min(0)
 private int totalDays;
 private double totalPrice;
 private int pickUpCityId;

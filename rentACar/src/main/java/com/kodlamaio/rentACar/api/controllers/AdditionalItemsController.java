@@ -14,8 +14,8 @@ import com.kodlamaio.rentACar.business.abstracts.AdditionalItemService;
 import com.kodlamaio.rentACar.business.requests.additionalItems.CreateAddionalItemRequest;
 import com.kodlamaio.rentACar.business.requests.additionalItems.DeleteAdditionalItemRequest;
 import com.kodlamaio.rentACar.business.requests.additionalItems.UpdateAdditionalItemRequest;
-import com.kodlamaio.rentACar.business.response.additionalItems.AdditionalItemResponse;
-import com.kodlamaio.rentACar.business.response.additionalItems.ListAdditionalItemResponse;
+import com.kodlamaio.rentACar.business.response.additionalItems.ReadAdditionalItemResponse;
+import com.kodlamaio.rentACar.business.response.additionalItems.GetAllAdditionalItemResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
 
@@ -42,11 +42,11 @@ public class AdditionalItemsController {
 
 	}
 	@GetMapping("/getall")
-	public DataResult<List<ListAdditionalItemResponse>>getAll(){
+	public DataResult<List<GetAllAdditionalItemResponse>>getAll(){
 		return this.additionalItemService.getAll();
 	}
 	@GetMapping("/getbyid")
-	public DataResult<AdditionalItemResponse>getById(@RequestParam int id){
+	public DataResult<ReadAdditionalItemResponse>getById(@RequestParam int id){
 		return this.additionalItemService.getById(id);
 	}
 

@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "cars" })
+//@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "cars" }) //map lemeden çalışınca gerek yok.sonsuz döngüden çıkmadığı zaman kullanılır.
 @Table(name = "brands")
 
 public class Brand {

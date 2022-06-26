@@ -3,6 +3,8 @@ package com.kodlamaio.rentACar.api.controllers;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,8 +16,8 @@ import com.kodlamaio.rentACar.business.requests.rentals.CreateRentalRequest;
 import com.kodlamaio.rentACar.business.requests.rentals.DeleteRentalRequest;
 import com.kodlamaio.rentACar.business.requests.rentals.UpdateRentalRequest;
 import com.kodlamaio.rentACar.business.response.cars.GetAllCarResponse;
-import com.kodlamaio.rentACar.business.response.rentals.ListRentalResponse;
-import com.kodlamaio.rentACar.business.response.rentals.RentalResponse;
+import com.kodlamaio.rentACar.business.response.rentals.GetAllRentalResponse;
+import com.kodlamaio.rentACar.business.response.rentals.ReadRentalResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
 import com.kodlamaio.rentACar.entitites.concretes.Rental;
@@ -31,12 +33,12 @@ public class RentalsController {
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody CreateRentalRequest createRentalRequest) throws NumberFormatException, RemoteException {
+	public Result add(@RequestBody @Valid CreateRentalRequest createRentalRequest) throws NumberFormatException, RemoteException {
 		return this.rentalService.add(createRentalRequest);
 	}
 
 	@PostMapping("/update")
-	public Result update(@RequestBody UpdateRentalRequest updateRentalRequest) {
+	public Result update(@RequestBody @Valid UpdateRentalRequest updateRentalRequest) throws NumberFormatException, RemoteException {
 		return this.rentalService.update(updateRentalRequest);
 
 	}
@@ -47,13 +49,13 @@ public class RentalsController {
 	}
 
 	@GetMapping("/getall")
-	public DataResult<List<ListRentalResponse>> getAll() {
+	public DataResult<List<GetAllRentalResponse>> getAll() {
 		return this.rentalService.getAll();
 
 	}
 	
 	@GetMapping("/getbyid")
-	public DataResult<RentalResponse>getId(@RequestBody int  id){
+	public DataResult<ReadRentalResponse>getId(@RequestBody int  id){
 		return this.rentalService.getById(id);
 	}
 	@GetMapping("/getallbyfindeksscore")

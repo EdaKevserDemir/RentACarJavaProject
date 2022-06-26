@@ -5,11 +5,10 @@ import java.util.List;
 import com.kodlamaio.rentACar.business.requests.cars.CreateCarRequest;
 import com.kodlamaio.rentACar.business.requests.cars.DeleteCarRequest;
 import com.kodlamaio.rentACar.business.requests.cars.UpdateCarRequest;
-import com.kodlamaio.rentACar.business.response.cars.CarResponse;
-import com.kodlamaio.rentACar.business.response.cars.ListCarResponse;
+import com.kodlamaio.rentACar.business.response.cars.GetAllCarResponse;
+import com.kodlamaio.rentACar.business.response.cars.ReadCarResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
-import com.kodlamaio.rentACar.entitites.concretes.Car;
 
 public interface CarService {
 
@@ -19,8 +18,8 @@ public interface CarService {
 
 	Result delete(DeleteCarRequest deleteCarRequest);
 
-	DataResult<List<ListCarResponse>> getAll();
+	DataResult<List<GetAllCarResponse>> getAll();
 
-	DataResult<CarResponse> getById(int id);
+	DataResult<ReadCarResponse> getById(int id);
 
 }

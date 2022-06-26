@@ -16,12 +16,10 @@ import com.kodlamaio.rentACar.business.abstracts.CarService;
 import com.kodlamaio.rentACar.business.requests.cars.CreateCarRequest;
 import com.kodlamaio.rentACar.business.requests.cars.DeleteCarRequest;
 import com.kodlamaio.rentACar.business.requests.cars.UpdateCarRequest;
-import com.kodlamaio.rentACar.business.response.cars.CarResponse;
 import com.kodlamaio.rentACar.business.response.cars.GetAllCarResponse;
-import com.kodlamaio.rentACar.business.response.cars.ListCarResponse;
+import com.kodlamaio.rentACar.business.response.cars.ReadCarResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
-import com.kodlamaio.rentACar.entitites.concretes.Car;
 
 @RestController
 @RequestMapping("/api/cars")
@@ -32,11 +30,6 @@ public class CarsController {
 	public CarsController(CarService carService) {
 		
 		this.carService = carService;
-	}
-	
-	@GetMapping("/cars")
-	public String cars() {
-		return "cars";
 	}
 	
 	@PostMapping("/add")
@@ -55,12 +48,12 @@ public class CarsController {
 	}
 
 	@GetMapping("/getall")
-	private DataResult<List<ListCarResponse>> getAll() {
+	private DataResult<List<GetAllCarResponse>> getAll() {
 		return carService.getAll();
 	
 	}
 	@GetMapping("/getbyid")
-	private DataResult<CarResponse> getById(@RequestParam int id) {
+	private DataResult<ReadCarResponse> getById(@RequestParam int id) {
 		return carService.getById(id);
 	}
 

@@ -1,6 +1,5 @@
 package com.kodlamaio.rentACar.business.concretes;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,10 +10,8 @@ import com.kodlamaio.rentACar.business.abstracts.MaintenanceService;
 import com.kodlamaio.rentACar.business.requests.maintenances.CreateMaintenanceRequest;
 import com.kodlamaio.rentACar.business.requests.maintenances.DeleteMaintenanceRequest;
 import com.kodlamaio.rentACar.business.requests.maintenances.UpdateMaintenanceRequest;
-import com.kodlamaio.rentACar.business.response.brands.ListBrandResponse;
-import com.kodlamaio.rentACar.business.response.colors.ColorResponse;
-import com.kodlamaio.rentACar.business.response.maintenances.ListMaintenanceResponse;
-import com.kodlamaio.rentACar.business.response.maintenances.MaintenanceResponse;
+import com.kodlamaio.rentACar.business.response.maintenances.GetAllMaintenanceResponse;
+import com.kodlamaio.rentACar.business.response.maintenances.ReadMaintenanceResponse;
 import com.kodlamaio.rentACar.core.utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
@@ -22,7 +19,6 @@ import com.kodlamaio.rentACar.core.utilities.results.SuccessDataResult;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessResult;
 import com.kodlamaio.rentACar.dataAccess.abstracts.CarRepository;
 import com.kodlamaio.rentACar.dataAccess.abstracts.MaintenanceRepository;
-import com.kodlamaio.rentACar.entitites.concretes.Brand;
 import com.kodlamaio.rentACar.entitites.concretes.Car;
 import com.kodlamaio.rentACar.entitites.concretes.Maintenance;
 
@@ -69,21 +65,21 @@ public class MaintenanceManager implements MaintenanceService {
 	}
 
 	@Override
-	public DataResult<List<ListMaintenanceResponse>> getAll() {
+	public DataResult<List<GetAllMaintenanceResponse>> getAll() {
 		List<Maintenance> maintenances = this.maintenanceRepository.findAll();
 
-		List<ListMaintenanceResponse> response = maintenances.stream().map(
-				maintenance -> this.modelMapperService.forResponse().map(maintenance, ListMaintenanceResponse.class))
+		List<GetAllMaintenanceResponse> response = maintenances.stream().map(
+				maintenance -> this.modelMapperService.forResponse().map(maintenance, GetAllMaintenanceResponse.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListMaintenanceResponse>>(response);
+		return new SuccessDataResult<List<GetAllMaintenanceResponse>>(response);
 	}
 
 	@Override
-	public DataResult<MaintenanceResponse> getById(int id) {
-		Maintenance maintenance=this.maintenanceRepository.findById(id);
-		MaintenanceResponse response=	this.modelMapperService.forResponse().map(maintenance, MaintenanceResponse.class);
-		return new SuccessDataResult<MaintenanceResponse>(response);
+	public DataResult<ReadMaintenanceResponse> getById(int id) {
+		Maintenance maintenance=this.maintenanceRepository.findById(id).get();
+		ReadMaintenanceResponse response=	this.modelMapperService.forResponse().map(maintenance, ReadMaintenanceResponse.class);
+		return new SuccessDataResult<ReadMaintenanceResponse>(response);
 			
 	}
 

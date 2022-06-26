@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,20 +20,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="additionalitems")
+@Table(name = "additionalitems")
 public class AdditionalItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private int id;
-	@Column(name="description")
-	private String description;
-	@Column(name="name")
-	private String name;
-	@Column(name="dailyPrice")
-	private double dailyPrice;	
 	
-	@OneToMany(mappedBy ="additionalItem")
-	List<Additional>additional;
+	@Column(name = "description")
+	private String description;
+	
+	@Column(name = "name")
+	private String name;
+	
+	@Column(name = "dailyPrice")
+	private double dailyPrice;
+
+	@OneToMany(mappedBy = "additionalItem")
+	List<OrderedAdditionalItems> orderedAdditionalItems;
 
 }

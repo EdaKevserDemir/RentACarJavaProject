@@ -4,9 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.kodlamaio.rentACar.entitites.concretes.Brand;
 import com.kodlamaio.rentACar.entitites.concretes.Customer;
+import com.kodlamaio.rentACar.entitites.concretes.IndividualCustomer;
 
-public interface CustomerRepository extends JpaRepository<Customer,Integer>{
-	Customer findByid(int id);
+public interface CustomerRepository extends JpaRepository<Customer, Integer> {
+
 	
+
 
 }

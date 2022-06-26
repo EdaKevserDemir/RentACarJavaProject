@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler","maintenances","rentals"})
 
 @Table(name = "cars")
 public class Car {
@@ -34,14 +33,12 @@ public class Car {
 	private int id;
 	@Column(name = "description")
 	private String description;
-	
+
 	@Column(name = "dailyPrice")
 	private double dailyPrice;
-	
-	
-	@Column(name="minFindeksScore")
+
+	@Column(name = "minFindeksScore")
 	private int minFindeksScore;
-	
 
 	@ManyToOne
 	@JoinColumn(name = "brand_id")
@@ -50,21 +47,19 @@ public class Car {
 	@ManyToOne
 	@JoinColumn(name = "color_id")
 	private Color color;
-	
-	
+
 	@OneToMany(mappedBy = "car")
-	private List<Maintenance>maintenances;
-	
+	private List<Maintenance> maintenances;
+
 	@OneToMany(mappedBy = "car")
 	private List<Rental> rentals;
-	
 
-	@Column(name="kilometer")
+	@Column(name = "kilometer")
 	private double kilometer;
-	
-	@Column(name="carPlate")
+
+	@Column(name = "carPlate")
 	private String carPlate;
-	
-	@Column(name="state")
+
+	@Column(name = "state")
 	private int state;
 }

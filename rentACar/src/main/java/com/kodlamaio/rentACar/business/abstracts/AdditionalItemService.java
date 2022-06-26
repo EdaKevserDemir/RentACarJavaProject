@@ -5,8 +5,8 @@ import java.util.List;
 import com.kodlamaio.rentACar.business.requests.additionalItems.CreateAddionalItemRequest;
 import com.kodlamaio.rentACar.business.requests.additionalItems.DeleteAdditionalItemRequest;
 import com.kodlamaio.rentACar.business.requests.additionalItems.UpdateAdditionalItemRequest;
-import com.kodlamaio.rentACar.business.response.additionalItems.AdditionalItemResponse;
-import com.kodlamaio.rentACar.business.response.additionalItems.ListAdditionalItemResponse;
+import com.kodlamaio.rentACar.business.response.additionalItems.ReadAdditionalItemResponse;
+import com.kodlamaio.rentACar.business.response.additionalItems.GetAllAdditionalItemResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
 
@@ -18,8 +18,8 @@ public interface AdditionalItemService {
 
 	Result delete(DeleteAdditionalItemRequest deleteAdditionalItemRequest);
 
-	DataResult<AdditionalItemResponse> getById(int id);
+	DataResult<ReadAdditionalItemResponse> getById(int id);
 
-	DataResult<List<ListAdditionalItemResponse>> getAll();
+	DataResult<List<GetAllAdditionalItemResponse>> getAll();
 
 }

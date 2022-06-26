@@ -14,8 +14,8 @@ import com.kodlamaio.rentACar.business.abstracts.CustomerService;
 import com.kodlamaio.rentACar.business.requests.customers.CreateCustomerRequest;
 import com.kodlamaio.rentACar.business.requests.customers.DeleteCustomerRequest;
 import com.kodlamaio.rentACar.business.requests.customers.UpdateCustomerRequest;
-import com.kodlamaio.rentACar.business.response.customers.CustomerResponse;
-import com.kodlamaio.rentACar.business.response.customers.ListCustomerResponse;
+import com.kodlamaio.rentACar.business.response.customers.ReadCustomerResponse;
+import com.kodlamaio.rentACar.business.response.customers.GetAllCustomerResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
 
@@ -48,17 +48,17 @@ public class CustomersController {
 	}
 
 	@GetMapping("/getbyid")
-	public DataResult<CustomerResponse>getById(@RequestParam int id){
+	public DataResult<ReadCustomerResponse>getById(@RequestParam int id){
 		return this.customerService.getById(id);
 	}
 	
 	@GetMapping("/getall")
-	public DataResult<List<ListCustomerResponse>>getAll(){
+	public DataResult<List<GetAllCustomerResponse>>getAll(){
 		return this.customerService.getAll();
 	}
 	
 	@GetMapping("/getallbypage")
-	public DataResult<List<ListCustomerResponse>>getAll(@RequestParam int pageNo,int pageSize){
+	public DataResult<List<GetAllCustomerResponse>>getAll(@RequestParam int pageNo,int pageSize){
 		return this.customerService.getAll(pageNo,pageSize);
 	}
 	

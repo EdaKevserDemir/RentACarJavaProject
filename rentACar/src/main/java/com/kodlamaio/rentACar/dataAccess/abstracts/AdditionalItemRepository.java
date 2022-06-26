@@ -9,5 +9,6 @@ import com.kodlamaio.rentACar.entitites.concretes.AdditionalItem;
 public interface AdditionalItemRepository extends JpaRepository<AdditionalItem, Integer>{
 
 	AdditionalItem findById(int id);
+	AdditionalItem findByName(String name);
 
 }
