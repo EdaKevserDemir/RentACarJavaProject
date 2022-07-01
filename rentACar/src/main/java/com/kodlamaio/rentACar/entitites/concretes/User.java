@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name="users")
-public class User {
+public abstract class User {
 	@Id
 	@GeneratedValue(strategy =GenerationType.IDENTITY)
 	

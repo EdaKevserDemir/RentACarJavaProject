@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kodlamaio.rentACar.business.abstracts.FindeksScoreCheckService;
@@ -24,9 +23,10 @@ import com.kodlamaio.rentACar.core.utilities.results.SuccessDataResult;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessResult;
 import com.kodlamaio.rentACar.dataAccess.abstracts.CarRepository;
 import com.kodlamaio.rentACar.dataAccess.abstracts.CustomerRepository;
+import com.kodlamaio.rentACar.dataAccess.abstracts.IndividualCustomerRepository;
 import com.kodlamaio.rentACar.dataAccess.abstracts.RentalRepository;
-import com.kodlamaio.rentACar.entitites.concretes.Brand;
 import com.kodlamaio.rentACar.entitites.concretes.Car;
+import com.kodlamaio.rentACar.entitites.concretes.CorporateCustomer;
 import com.kodlamaio.rentACar.entitites.concretes.Customer;
 import com.kodlamaio.rentACar.entitites.concretes.Rental;
 
@@ -34,23 +34,22 @@ import com.kodlamaio.rentACar.entitites.concretes.Rental;
 public class RentalManager implements RentalService {
 
 	RentalRepository rentalRepository;
-
 	CarRepository carRepository;
-
 	ModelMapperService modelMapperService;
-
 	CustomerRepository customerRepository;
-
+	IndividualCustomerRepository individualCustomerRepository;
 	FindeksScoreCheckService findeksScoreCheckService;
 	double totalPrice = 0;
 
 	public RentalManager(RentalRepository rentalRepository, CarRepository carRepository,
 			ModelMapperService modelMapperService, CustomerRepository customerRepository,
-			FindeksScoreCheckService findeksScoreCheckService) {
+			IndividualCustomerRepository individualCustomerRepository, FindeksScoreCheckService findeksScoreCheckService) {
+
 		this.rentalRepository = rentalRepository;
 		this.carRepository = carRepository;
 		this.modelMapperService = modelMapperService;
 		this.customerRepository = customerRepository;
+		this.individualCustomerRepository = individualCustomerRepository;
 		this.findeksScoreCheckService = findeksScoreCheckService;
 	}
 
@@ -58,10 +57,12 @@ public class RentalManager implements RentalService {
 	public Result add(CreateRentalRequest createRentalRequest) throws NumberFormatException, RemoteException {
 		checkIfCarId(createRentalRequest.getCarId());
 		Rental rental = this.modelMapperService.forRequest().map(createRentalRequest, Rental.class);
-		Customer customer = this.customerRepository.findById(createRentalRequest.getCustomerId()).get();
+	//	Customer customer = this.customerRepository.findById(createRentalRequest.getCustomerId()).get();
+		// IndividualCustomer
+		// individualCustomer=this.individualCustomerRepository.findById(createRentalRequest.);
 		Car car = this.carRepository.findById(createRentalRequest.getCarId());
 		checkIfAvailableState(rental);
-		checkFindexMinValue(car.getMinFindeksScore(), customer.getIdentity());
+		// checkFindexMinValue(car.getMinFindeksScore(), customer.getIdentity());
 		rental.setTotalPrice(calculateTotalPrice(rental, car));
 		rentalRepository.save(rental);
 		return new Result(true, "CAR.RENTED");
@@ -78,9 +79,9 @@ public class RentalManager implements RentalService {
 
 		Car car = this.carRepository.findById(updateRentalRequest.getCarId());
 
-		Customer customer = this.customerRepository.findById(updateRentalRequest.getCustomerId()).get();
+	//	Customer customer = this.customerRepository.findById(updateRentalRequest.getCustomerId()).get();
 
-		checkFindexMinValue(car.getMinFindeksScore(), customer.getIdentity());
+		// checkFindexMinValue(car.getMinFindeksScore(), customer.getIdentity());
 
 		updateToRental.setTotalPrice(calculateTotalPrice(updateToRental, car));
 
@@ -196,3 +197,5 @@ public class RentalManager implements RentalService {
 	}
 
 }
+
+

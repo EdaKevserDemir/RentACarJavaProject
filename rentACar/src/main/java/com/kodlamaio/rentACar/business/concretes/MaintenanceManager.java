@@ -12,6 +12,7 @@ import com.kodlamaio.rentACar.business.requests.maintenances.DeleteMaintenanceRe
 import com.kodlamaio.rentACar.business.requests.maintenances.UpdateMaintenanceRequest;
 import com.kodlamaio.rentACar.business.response.maintenances.GetAllMaintenanceResponse;
 import com.kodlamaio.rentACar.business.response.maintenances.ReadMaintenanceResponse;
+import com.kodlamaio.rentACar.core.utilities.exceptions.BusinessException;
 import com.kodlamaio.rentACar.core.utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
@@ -24,22 +25,27 @@ import com.kodlamaio.rentACar.entitites.concretes.Maintenance;
 
 @Service
 public class MaintenanceManager implements MaintenanceService {
-@Autowired
+
 	private MaintenanceRepository maintenanceRepository;
-@Autowired
 	private CarRepository carRepository;
-@Autowired
 	private ModelMapperService modelMapperService;
 
+	public MaintenanceManager(MaintenanceRepository maintenanceRepository, CarRepository carRepository,
+			ModelMapperService modelMapperService) {
+
+		this.maintenanceRepository = maintenanceRepository;
+		this.carRepository = carRepository;
+		this.modelMapperService = modelMapperService;
+	}
 
 	@Override
 	public Result add(CreateMaintenanceRequest createMaintenanceRequest) {
-
+		checkIfCarId(createMaintenanceRequest.getCarId());
 		Maintenance maintenance = this.modelMapperService.forRequest().map(createMaintenanceRequest, Maintenance.class);
 		Car car = this.carRepository.findById(createMaintenanceRequest.getCarId());
 		car.setState(2);
 		maintenance.setCar(car);
-		
+
 		this.maintenanceRepository.save(maintenance);
 		return new SuccessResult("MAINTENANCE.ADDED");
 
@@ -47,11 +53,12 @@ public class MaintenanceManager implements MaintenanceService {
 
 	@Override
 	public Result update(UpdateMaintenanceRequest updateMaintenanceRequest) {
-
+		checkIfMaintenanceId(updateMaintenanceRequest.getId());
+		checkIfCarId(updateMaintenanceRequest.getCarId());
 		Maintenance maintenance = this.modelMapperService.forRequest().map(updateMaintenanceRequest, Maintenance.class);
 		Car car = this.carRepository.findById(updateMaintenanceRequest.getCarId());
 		maintenance.setCar(car);
-		
+
 		this.maintenanceRepository.save(maintenance);
 		return new SuccessResult("updated");
 
@@ -77,10 +84,27 @@ public class MaintenanceManager implements MaintenanceService {
 
 	@Override
 	public DataResult<ReadMaintenanceResponse> getById(int id) {
-		Maintenance maintenance=this.maintenanceRepository.findById(id).get();
-		ReadMaintenanceResponse response=	this.modelMapperService.forResponse().map(maintenance, ReadMaintenanceResponse.class);
+
+		Maintenance maintenance = this.maintenanceRepository.findById(id);
+		ReadMaintenanceResponse response = this.modelMapperService.forResponse().map(maintenance,
+				ReadMaintenanceResponse.class);
 		return new SuccessDataResult<ReadMaintenanceResponse>(response);
-			
+
+	}
+
+	private void checkIfMaintenanceId(int id) {
+		Maintenance maintenance = this.maintenanceRepository.findById(id);
+		if (maintenance == null) {
+			throw new BusinessException("MAINTENANCE NOT EXISTS");
+		}
+	}
+	
+
+	private void checkIfCarId(int id) {
+		Car car = this.carRepository.findById(id);
+		if (car == null) {
+			throw new BusinessException("CAR ID NOT EXISTS");
+		}
 	}
 
 }

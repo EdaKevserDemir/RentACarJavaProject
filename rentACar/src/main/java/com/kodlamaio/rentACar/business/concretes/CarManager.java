@@ -51,10 +51,13 @@ public class CarManager implements CarService {
 	public Result add(CreateCarRequest createCarRequest) {
 		checkIfBrandCount(createCarRequest.getBrandId());
 		checkIfExistColorId(createCarRequest.getColorId());
-//		checkIfExistBrandId(createCarRequest.getBrandId());
-//		checkIfExistCarPlate(createCarRequest.getCarPlate());
+		checkIfExistBrandId(createCarRequest.getBrandId());
+		checkIfExistCarPlate(createCarRequest.getCarPlate());
 
-		Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
+		// Car car = this.modelMapperService.forRequest().map(createCarRequest,
+		// Car.class);
+		Car car = Car.builder().carPlate(createCarRequest.getCarPlate()).dailyPrice(createCarRequest.getDailyPrice())
+				.build();
 		car.setState(1);
 		this.carRepository.save(car);
 		return new SuccessResult("CAR.ADDED");
@@ -66,8 +69,8 @@ public class CarManager implements CarService {
 
 		checkIfExistCarId(updateCarRequest.getId());
 		checkIfExistBrandId(updateCarRequest.getBrandId());
-		updateIfSameBrandId(updateCarRequest.getId(), updateCarRequest.getBrandId());
-//		checkIfExistColorId(updateCarRequest.getColorId());
+		// updateIfSameBrandId(updateCarRequest.getId(), updateCarRequest.getBrandId());
+		checkIfExistColorId(updateCarRequest.getColorId());
 
 		Car updateToCar = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		checkIfExistCarPlate(updateToCar.getCarPlate());
@@ -111,14 +114,14 @@ public class CarManager implements CarService {
 
 	}
 
-	private void updateIfSameBrandId(int carId, int brandId) {
-		Car car = this.carRepository.findById(carId);
-		Brand brand = this.brandRepository.findById(brandId);
-		if (car.getBrand() == brand) {
-			checkIfBrandCount(brandId);
-
-		}
-	}
+//	private void updateIfSameBrandId(int carId, int brandId) {
+//		Car car = this.carRepository.findById(carId);
+//		Brand brand = this.brandRepository.findById(brandId);
+//		if (car.getBrand() == brand) {
+//			checkIfBrandCount(brandId);
+//
+//		}
+//	}
 
 	// checking for brandId
 	private void checkIfExistCarId(int id) {
@@ -149,7 +152,7 @@ public class CarManager implements CarService {
 		if (car.getCarPlate() == carPlate) {
 			throw new BusinessException(carPlate);
 		} else {
-			
+
 			car.setCarPlate(carPlate);
 		}
 	}

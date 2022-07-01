@@ -9,8 +9,8 @@ import com.kodlamaio.rentACar.business.abstracts.BrandService;
 import com.kodlamaio.rentACar.business.requests.brands.CreateBrandRequest;
 import com.kodlamaio.rentACar.business.requests.brands.DeleteBrandRequest;
 import com.kodlamaio.rentACar.business.requests.brands.UpdateBrandRequest;
-import com.kodlamaio.rentACar.business.response.brands.ReadBrandResponse;
 import com.kodlamaio.rentACar.business.response.brands.GetAllBrandResponse;
+import com.kodlamaio.rentACar.business.response.brands.ReadBrandResponse;
 import com.kodlamaio.rentACar.core.utilities.exceptions.BusinessException;
 import com.kodlamaio.rentACar.core.utilities.mapping.ModelMapperService;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
@@ -19,7 +19,6 @@ import com.kodlamaio.rentACar.core.utilities.results.SuccessDataResult;
 import com.kodlamaio.rentACar.core.utilities.results.SuccessResult;
 import com.kodlamaio.rentACar.dataAccess.abstracts.BrandRepository;
 import com.kodlamaio.rentACar.entitites.concretes.Brand;
-import com.kodlamaio.rentACar.entitites.concretes.Rental;
 
 //Id,name
 
@@ -39,7 +38,10 @@ public class BrandManager implements BrandService {
 	@Override
 	public Result add(CreateBrandRequest createBrandRequest) {
 		checkIfBrandExistsByName(createBrandRequest.getName());
-		Brand brand = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
+		//Brand brand = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
+		Brand brand=Brand.builder()
+				.name(createBrandRequest.getName())
+				.build();
 		this.brandRepository.save(brand);
 		return new SuccessResult("BRAND.ADDED");
 	}

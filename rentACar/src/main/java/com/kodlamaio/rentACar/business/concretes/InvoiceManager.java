@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.kodlamaio.rentACar.business.abstracts.InvoiceService;
@@ -30,18 +28,18 @@ import com.kodlamaio.rentACar.entitites.concretes.Rental;
 
 @Service
 public class InvoiceManager implements InvoiceService {
-	@Autowired
-	InvoiceRepository invoiceRepository;
-	@Autowired
-	ModelMapperService modelMapperService;
-	@Autowired
-	@Lazy
-	OrderedAdditionalItemsRepository additionalRepository;
-	@Autowired
-	@Lazy
-	AdditionalItemRepository additionalItemRepository;
-	@Autowired
-	RentalRepository rentalRepository;
+
+	private InvoiceRepository invoiceRepository;
+
+	private	ModelMapperService modelMapperService;
+
+	private	OrderedAdditionalItemsRepository additionalRepository;
+
+	private AdditionalItemRepository additionalItemRepository;
+
+	private RentalRepository rentalRepository;
+	
+
 
 	public InvoiceManager(InvoiceRepository invoiceRepository, ModelMapperService modelMapperService,
 			OrderedAdditionalItemsRepository additionalRepository, RentalRepository rentalRepository) {
@@ -49,7 +47,6 @@ public class InvoiceManager implements InvoiceService {
 		this.invoiceRepository = invoiceRepository;
 		this.modelMapperService = modelMapperService;
 		this.additionalRepository = additionalRepository;
-
 		this.rentalRepository = rentalRepository;
 	}
 
@@ -60,8 +57,8 @@ public class InvoiceManager implements InvoiceService {
 		Invoice invoice = this.modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
 		invoice.setInvoiceDate(invoice.getInvoiceDate());
 		invoice.setSumTotalPrice(calculateTotalPrice(createInvoiceRequest.getRentalId()));
-		//invoice.setInvoiceNumber("123plk");
-		
+		// invoice.setInvoiceNumber("123plk");
+
 		invoice.setState(1);
 		this.invoiceRepository.save(invoice);
 
@@ -79,6 +76,7 @@ public class InvoiceManager implements InvoiceService {
 	public Result delete(DeleteInvoiceRequest deleteInvoiceRequest) {
 		Invoice invoice = this.modelMapperService.forRequest().map(deleteInvoiceRequest, Invoice.class);
 		invoice.setState(0);
+		this.invoiceRepository.save(invoice);
 		return new SuccessResult("invoice is canceled");
 	}
 
@@ -90,35 +88,17 @@ public class InvoiceManager implements InvoiceService {
 				.map(invoice -> this.modelMapperService.forResponse().map(invoice, GetAllInvoiceResponse.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<GetAllInvoiceResponse>>(response,"All Invoices");
+		return new SuccessDataResult<List<GetAllInvoiceResponse>>(response, "All Invoices");
 	}
 
 	@Override
 	public DataResult<ReadInvoiceResponse> getById(int id) {
 
 		Invoice invoice = this.invoiceRepository.findById(id).get();
-		ReadInvoiceResponse invoiceResponse = this.modelMapperService.forResponse().map(invoice, ReadInvoiceResponse.class);
+		ReadInvoiceResponse invoiceResponse = this.modelMapperService.forResponse().map(invoice,
+				ReadInvoiceResponse.class);
 		return new SuccessDataResult<ReadInvoiceResponse>(invoiceResponse);
 	}
-//
-////	public void checkIfInvoiceNumber(String invoiceNumber) {
-////		Invoice invoice = this.invoiceRepository.findByInvoiceNumber(invoiceNumber);
-////		if (invoice != null) {
-////			throw new BusinessException("INVOICE.EXISTS");
-////		}
-
-//	private DataResult<List<AdditionalItem>> getByRentalId(int rentalId) {
-//		List<Additional> additional = this.additionalRepository.getByRentalId(rentalId);
-//		List<AdditionalItem> additionalItems = new ArrayList<AdditionalItem>();
-//
-//		for (Additional additionalService : additional) {
-//			AdditionalItem additionalItem = this.additionalItemRepository
-//					.findById(additionalService.getAdditionalItem().getId());
-//			additionalItems.add(additionalItem);
-//		}
-//		return new SuccessDataResult<List<AdditionalItem>>(additionalItems);
-//
-//	}
 
 	private double calculateTotalPrice(int rentalId) {
 		Rental rental = this.rentalRepository.findById(rentalId);

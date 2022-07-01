@@ -6,4 +6,5 @@ import com.kodlamaio.rentACar.entitites.concretes.Maintenance;
 
 public interface MaintenanceRepository extends JpaRepository<Maintenance, Integer>{
 
+	Maintenance findById(int id);
 }

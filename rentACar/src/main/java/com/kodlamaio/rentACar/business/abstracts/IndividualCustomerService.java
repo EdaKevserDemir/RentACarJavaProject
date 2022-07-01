@@ -15,7 +15,8 @@ public interface IndividualCustomerService {
 	Result add(CreateIndividualCustomersRequest createIndividualCustomersRequest)
 			throws NumberFormatException, RemoteException;
 
-	Result update(UpdateIndividualCustomersRequest updateIndividualCustomersRequest);
+	Result update(UpdateIndividualCustomersRequest updateIndividualCustomersRequest)
+			throws NumberFormatException, RemoteException;
 
 	Result delete(DeleteIndividualCustomersRequest deleteIndividualCustomersRequest);
 

@@ -9,6 +9,11 @@ public interface IndividualCustomerRepository extends JpaRepository<IndividualCu
 
 	IndividualCustomer findById(int id);
 
-	boolean checkIfRealPerson(CreateIndividualCustomersRequest createIndividualCustomersRequest);
+	IndividualCustomer findByIdentity(String identity);
+	
+	IndividualCustomer findByEmail(String email);
+
+	
+	
 
 }

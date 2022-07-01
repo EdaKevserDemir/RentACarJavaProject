@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeleteIndividualCustomersRequest {
-private int id;
+private int individualId;
 }

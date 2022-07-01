@@ -21,4 +21,9 @@ public class UpdateCorporateCustomersRequest {
 	@NotNull
 	private String taxNumber;
 
+	private String email;
+
+	private String password;
+	private String phoneNumber;
+
 }

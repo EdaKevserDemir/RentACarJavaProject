@@ -27,7 +27,7 @@ public class Customer  extends User{
 	private int customerId;
 	
 	@Column(name="customerNumber")
-	private int customerNumber;
+	private String customerNumber;
 	
 	@OneToMany(mappedBy = "customer")
 	private List<Address> addresses;

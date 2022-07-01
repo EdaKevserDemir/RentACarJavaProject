@@ -1,5 +1,7 @@
 package com.kodlamaio.rentACar.api.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.hibernate.sql.Delete;
@@ -16,6 +18,7 @@ import com.kodlamaio.rentACar.business.requests.addresses.CreateSameAddressReque
 import com.kodlamaio.rentACar.business.requests.addresses.DeleteAddressRequest;
 import com.kodlamaio.rentACar.business.requests.addresses.UpdateDifferentAddressRequest;
 import com.kodlamaio.rentACar.business.requests.addresses.UpdateSameAddressRequest;
+import com.kodlamaio.rentACar.business.response.addresses.GetAllAddressResponse;
 import com.kodlamaio.rentACar.business.response.addresses.ReadAddressResponse;
 import com.kodlamaio.rentACar.core.utilities.results.DataResult;
 import com.kodlamaio.rentACar.core.utilities.results.Result;
@@ -25,7 +28,12 @@ import com.kodlamaio.rentACar.core.utilities.results.Result;
 public class AddressesController {
 
 	@Autowired
-	AddressService addressService;
+	private AddressService addressService;
+
+	private AddressesController(AddressService addressService) {
+		
+		this.addressService = addressService;
+	}
 
 	@PostMapping("/addsameaddress")
 	private Result addSameAddress(@RequestBody @Valid CreateSameAddressRequest createSameAddressRequest) {
@@ -62,6 +70,12 @@ public class AddressesController {
 	private DataResult<ReadAddressResponse> getById(int id) {
 
 		return addressService.getById(id);
+
+	}
+	@GetMapping("/getall")
+	private DataResult<List<GetAllAddressResponse>> getAll() {
+
+		return this.addressService.getAll();
 
 	}
 }

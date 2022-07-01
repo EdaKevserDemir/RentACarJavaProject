@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = false)
-@PrimaryKeyJoinColumn(name = "individualId", referencedColumnName = "id")
+@PrimaryKeyJoinColumn(name = "individualId", referencedColumnName = "customerId")
 @Table(name = "individualCustomers")
-public class IndividualCustomer {
+public class IndividualCustomer extends Customer{
 	
 	@Column(name = "individualId",insertable = false,updatable = false)
 	private int individualId;
