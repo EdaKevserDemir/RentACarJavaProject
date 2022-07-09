@@ -5,10 +5,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +26,7 @@ import com.kodlamaio.rentACar.core.utilities.results.Result;
 @RestController
 @RequestMapping("/api/individualcustomers")
 public class IndividualCustomersController {
-	
+
 	IndividualCustomerService individualCustomerService;
 
 	public IndividualCustomersController(IndividualCustomerService individualCustomerService) {
@@ -48,8 +50,11 @@ public class IndividualCustomersController {
 	private Result delete(@RequestBody  DeleteIndividualCustomersRequest deleteIndividualCustomersRequest) {
 		return this.individualCustomerService.delete(deleteIndividualCustomersRequest);
 	}
-
-	@GetMapping("/getall")
+	
+	@RequestMapping(path="individualcustomerss",method=RequestMethod.GET,
+			produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE} )
+	
+	
 	private DataResult<List<GetAllIndividualCustomerResponse>> getAll() {
 		return this.individualCustomerService.getAll();
 	}
